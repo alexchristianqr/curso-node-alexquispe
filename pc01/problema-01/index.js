@@ -1,9 +1,8 @@
 const fs = require("node:fs");
 const {Buffer} = require('node:buffer');
-
+const dataBuffer = Buffer.alloc(1024);
+const tamanoBuffer = dataBuffer.length;
 const filename = "archivo.txt";
-let dataBuffer = Buffer.alloc(1024);
-let tamanoBuffer = dataBuffer.length;
 
 /**
  * Trabajar archivo
