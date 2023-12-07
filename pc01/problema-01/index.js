@@ -22,7 +22,7 @@ function workFile() {
  * @param fd: File descriptor
  */
 function myReadFile(err, fd) {
-    if (err) if (err) printLog({err, message: "Error al leer el archivo"});
+    if (err) printLog({err, message: "Error al leer el archivo"});
 
     fs.read(fd, dataBuffer, 0, tamanoBuffer, 0, myProcessData);
     fs.close(fd, myCloseFile);
