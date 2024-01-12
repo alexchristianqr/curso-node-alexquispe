@@ -10,6 +10,15 @@ class TodoController {
       return errorHandler({ req, res, error });
     }
   }
+  async getTodoById(req, res) {
+    try {
+      const { id } = req.params;
+      const result = await todoService.getById(id);
+      return responseHandler({ req, res }, result);
+    } catch (error) {
+      return errorHandler({ req, res, error });
+    }
+  }
   async createTodo(req, res) {
     try {
       const data = req.body;
@@ -24,6 +33,15 @@ class TodoController {
       const { id } = req.params;
       const data = req.body;
       const result = await todoService.update(id, data);
+      return responseHandler({ req, res }, result);
+    } catch (error) {
+      return errorHandler({ req, res, error });
+    }
+  }
+  async deleteTodo(req, res) {
+    try {
+      const { id } = req.params;
+      const result = await todoService.remove(id);
       return responseHandler({ req, res }, result);
     } catch (error) {
       return errorHandler({ req, res, error });
