@@ -9,17 +9,19 @@ class TodoService {
   }
   async create(data) {
     const { payload } = data;
-    const result = await Todo.create(payload);
-    return result;
+    return Todo.create(payload);
   }
   async update(id, data) {
     const { payload } = data;
-    const result = await Todo.updateOne({ _id: id }, payload);
-    return result;
+    return Todo.updateOne({ _id: id }, payload);
+  }
+  async updateField(id, data) {
+    const { payload } = data;
+    await Todo.updateOne({ _id: id }, payload);
+    return this.getById(id);
   }
   async remove(id) {
-    const result = await Todo.deleteOne({ _id: id });
-    return result;
+    return Todo.deleteOne({ _id: id });
   }
 }
 

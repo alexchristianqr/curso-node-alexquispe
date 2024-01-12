@@ -38,6 +38,16 @@ class TodoController {
       return errorHandler({ req, res, error });
     }
   }
+  async updateFieldTodo(req, res) {
+    try {
+      const { id } = req.params;
+      const data = req.body;
+      const result = await todoService.updateField(id, data);
+      return responseHandler({ req, res }, result);
+    } catch (error) {
+      return errorHandler({ req, res, error });
+    }
+  }
   async deleteTodo(req, res) {
     try {
       const { id } = req.params;
