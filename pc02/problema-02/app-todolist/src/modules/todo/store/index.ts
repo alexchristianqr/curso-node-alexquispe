@@ -11,5 +11,10 @@ export const useTodoStore = defineStore("todo", {
     },
   }),
   getters: {},
-  actions: {},
+  actions: {
+    async getTodos() {
+      try {
+      } catch (error) {}
+    },
+  },
 });
