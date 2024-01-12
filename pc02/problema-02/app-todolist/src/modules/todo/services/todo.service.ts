@@ -29,4 +29,14 @@ export class TodoService {
       return error;
     }
   }
+  static async deleteTodo(payload: Todo) {
+    try {
+      const data = {
+        payload,
+      };
+      return await httpAdapterService.delete(`/todo/${payload._id}`, data);
+    } catch (error) {
+      return error;
+    }
+  }
 }

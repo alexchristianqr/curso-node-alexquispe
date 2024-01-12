@@ -3,7 +3,7 @@ import { reactive } from "vue";
 import { ConfigForm, Todo } from "../interfaces";
 import { useTodoStore } from "../store";
 
-const { createTodo, updateTodo } = useTodoStore();
+const { createTodo, updateTodo, deleteTodo } = useTodoStore();
 
 const props = defineProps<{
   configForm?: ConfigForm;
@@ -18,11 +18,16 @@ const payloadForm = reactive<Todo>(props.payloadForm);
 
 const onRegister = (data: any) => {
   createTodo(data);
+  window.location.reload();
 };
 const onEdit = (data: any) => {
   updateTodo(data);
+  window.location.reload();
 };
-const onRemove = () => {};
+const onRemove = (data: any) => {
+  deleteTodo(data);
+  window.location.reload();
+};
 </script>
 
 <template>
@@ -44,8 +49,10 @@ const onRemove = () => {};
     <div>
       <label>Accion:</label>
       <button type="button" v-if="props.configForm?.action === 'register'" @click="onRegister(payloadForm)">Registrar</button>
-      <button type="button" v-if="props.configForm?.action === 'edit'" @click="onEdit(payloadForm)">Actualizar</button>
+      <button type="button" v-if="props.configForm?.action === 'edit'" @click="onEdit(payloadForm)">Actualizar registro</button>
+      <button type="button" v-if="props.configForm?.action === 'remove'" @click="onRemove(payloadForm)">Eliminar registro</button>
       <button type="reset" v-if="props.configForm?.action === 'edit' || props.configForm?.action === 'remove'">Cancelar</button>
+      <button type="submit" v-if="props.configForm?.action !== 'register'">Nuevo</button>
     </div>
   </form>
 </template>

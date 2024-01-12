@@ -30,5 +30,9 @@ export const useTodoStore = defineStore("todo", {
       item.status = payload.status;
       item.updated_at = payload.updated_at;
     },
+    async deleteTodo(payload: Todo) {
+      await TodoService.deleteTodo(payload);
+      this.list.data = this.list.data.filter((item) => item._id !== payload._id);
+    },
   },
 });

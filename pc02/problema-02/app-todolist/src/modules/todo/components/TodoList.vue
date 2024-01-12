@@ -17,12 +17,20 @@ onMounted(() => {
   payloadForm.status = "todo";
 });
 
-const updateForm = (data: Todo) => {
+const editForm = (data: Todo) => {
   configForm.value.action = "edit";
+  payloadForm._id = data._id;
   payloadForm.description = data.description;
   payloadForm.status = data.status;
   payloadForm.created_at = data.created_at;
+};
+
+const removeForm = (data: Todo) => {
+  configForm.value.action = "remove";
   payloadForm._id = data._id;
+  payloadForm.description = data.description;
+  payloadForm.status = data.status;
+  payloadForm.created_at = data.created_at;
 };
 </script>
 
@@ -58,16 +66,16 @@ const updateForm = (data: Todo) => {
           </td>
           <td>
             <template v-if="todo.status == 'complete'">
-              <button @click="updateForm(todo)">editar</button>
-              <button>eliminar</button>
+              <button disabled>editar</button>
+              <button disabled>eliminar</button>
             </template>
             <template v-if="todo.status == 'in_progress'">
-              <button @click="updateForm(todo)">editar</button>
-              <button>eliminar</button>
+              <button @click="editForm(todo)">editar</button>
+              <button disabled>eliminar</button>
             </template>
             <template v-if="todo.status == 'todo'">
-              <button @click="updateForm(todo)">editar</button>
-              <button>eliminar</button>
+              <button @click="editForm(todo)">editar</button>
+              <button @click="removeForm(todo)">eliminar</button>
             </template>
           </td>
         </tr>
