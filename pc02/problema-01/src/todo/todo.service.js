@@ -1,10 +1,13 @@
+import { Todo } from "./todo.schema.js";
+
 class TodoService {
   async getAll() {
-    return ["alex", "Glenda"];
+    return Todo.find();
   }
   async create(data) {
     const { payload } = data;
-    return payload;
+    const result = await Todo.create(payload);
+    return result;
   }
 }
 
