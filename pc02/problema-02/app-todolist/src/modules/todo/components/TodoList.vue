@@ -1,24 +1,41 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
 import { useTodoStore } from "../store";
-import { onMounted } from "vue";
+import { onMounted, reactive, ref } from "vue";
 import TodoForm from "./TodoForm.vue";
+import { Todo } from "../interfaces";
 
 const { todos } = storeToRefs(useTodoStore());
 const { getTodos } = useTodoStore();
 
+const configForm = ref({ action: "register" });
+const payloadForm = reactive<Todo>({});
+
 onMounted(() => {
   getTodos();
+  configForm.value.action = "register";
+  payloadForm.status = "todo";
 });
+
+const updateForm = (data: Todo) => {
+  configForm.value.action = "edit";
+  payloadForm.description = data.description;
+  payloadForm.status = data.status;
+  payloadForm.created_at = data.created_at;
+  payloadForm._id = data._id;
+};
 </script>
 
 <template>
-  <TodoForm :configForm="{ action: 'register' }" />
+  <h2>Formulario</h2>
 
-  <hr style="margin: 1rem 0 1rem 0" />
-  <div style="border: solid 1px; padding: 0.5rem; margin: 1rem 0 1rem 0">
-    <pre>{{ todos }}</pre>
-  </div>
+  <TodoForm :configForm="configForm" :payloadForm="payloadForm" @register="" />
+
+  <h2>Listado</h2>
+
+  <!--  <div style="border: solid 1px; padding: 0.5rem; margin: 1rem 0 1rem 0">-->
+  <!--    <pre>{{ todos }}</pre>-->
+  <!--  </div>-->
 
   <div>
     <table>
@@ -41,15 +58,15 @@ onMounted(() => {
           </td>
           <td>
             <template v-if="todo.status == 'complete'">
-              <button>editar</button>
+              <button @click="updateForm(todo)">editar</button>
               <button>eliminar</button>
             </template>
             <template v-if="todo.status == 'in_progress'">
-              <button>editar</button>
+              <button @click="updateForm(todo)">editar</button>
               <button>eliminar</button>
             </template>
             <template v-if="todo.status == 'todo'">
-              <button>editar</button>
+              <button @click="updateForm(todo)">editar</button>
               <button>eliminar</button>
             </template>
           </td>

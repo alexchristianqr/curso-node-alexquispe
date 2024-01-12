@@ -19,4 +19,14 @@ export class TodoService {
       return error;
     }
   }
+  static async updateTodo(payload: Todo) {
+    try {
+      const data = {
+        payload,
+      };
+      return await httpAdapterService.put(`/todo/${payload._id}`, data);
+    } catch (error) {
+      return error;
+    }
+  }
 }

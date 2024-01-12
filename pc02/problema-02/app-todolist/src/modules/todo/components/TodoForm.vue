@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { reactive } from "vue";
 import { ConfigForm, Todo } from "../interfaces";
 import { useTodoStore } from "../store";
 
-const { createTodo } = useTodoStore();
+const { createTodo, updateTodo } = useTodoStore();
 
 const props = defineProps<{
   configForm?: ConfigForm;
@@ -14,22 +14,23 @@ const statuses = [
   { key: "in_progress", value: "En progreso" },
   { key: "complete", value: "Completado" },
 ];
-const payloadForm = ref<Todo>({
-  description: props.payloadForm?.description,
-  status: props.payloadForm?.status,
-  created_at: props.payloadForm?.created_at,
-});
+const payloadForm = reactive<Todo>(props.payloadForm);
 
-onMounted(() => {
-  props.configForm.action = "register";
-});
+const onRegister = (data: any) => {
+  createTodo(data);
+};
+const onEdit = (data: any) => {
+  updateTodo(data);
+};
+const onRemove = () => {};
 </script>
 
 <template>
+  <!--  <div style="border: solid 1px; padding: 0.5rem; margin: 1rem 0 1rem 0">-->
+  <!--    <pre>{{ payloadForm }}</pre>-->
+  <!--  </div>-->
+
   <form>
-    <div style="border: solid 1px; padding: 0.5rem; margin: 1rem 0 1rem 0">
-      <pre>{{ payloadForm }}</pre>
-    </div>
     <div>
       <label>Descripción:</label>
       <input type="text" v-model="payloadForm.description" />
@@ -42,8 +43,9 @@ onMounted(() => {
     </div>
     <div>
       <label>Accion:</label>
-      <button type="button" v-if="props.configForm?.action === 'register'" @click="createTodo(payloadForm)">Registrar</button>
-      <button type="button" v-if="props.configForm?.action === 'edit'">Actualizar</button>
+      <button type="button" v-if="props.configForm?.action === 'register'" @click="onRegister(payloadForm)">Registrar</button>
+      <button type="button" v-if="props.configForm?.action === 'edit'" @click="onEdit(payloadForm)">Actualizar</button>
+      <button type="reset" v-if="props.configForm?.action === 'edit' || props.configForm?.action === 'remove'">Cancelar</button>
     </div>
   </form>
 </template>
