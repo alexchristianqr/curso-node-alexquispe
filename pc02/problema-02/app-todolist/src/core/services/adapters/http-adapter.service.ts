@@ -120,4 +120,4 @@ class HttpAdapterService {
   }
 }
 
-export const httpAdapterService = new HttpAdapterService("MY_URL_ENDPOINT");
+export const httpAdapterService = new HttpAdapterService("http://localhost:3000/api/v1");

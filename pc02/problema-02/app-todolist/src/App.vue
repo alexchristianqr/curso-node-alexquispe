@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import Todolist from "./modules/todo/components/Todolist.vue";
-import MyHeader from "./layouts/MyHeader.vue";
+// import MyHeader from "./layouts/MyHeader.vue";
 </script>
 
 <template>
-  <MyHeader/>
-  <Todolist />
+  <div>
+    <!--    <MyHeader />-->
+    <Todolist />
+  </div>
 </template>
 
 <style scoped>

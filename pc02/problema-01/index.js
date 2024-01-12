@@ -2,13 +2,22 @@ import { config } from "dotenv";
 import express from "express";
 import morgan from "morgan";
 import mongoose from "mongoose";
+import cors from "cors";
+
 import { todoRoute } from "./src/todo/todo.route.js";
 
 config();
 const app = express();
+const whiteList = "*";
+const corsOptions = {
+  origin: whiteList,
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+};
 
 app.use(express.json());
 app.use(morgan("tiny"));
+app.use(cors(corsOptions));
 app.use("/api/v1/", [todoRoute]);
 
 app.get("/", (req, res) => {

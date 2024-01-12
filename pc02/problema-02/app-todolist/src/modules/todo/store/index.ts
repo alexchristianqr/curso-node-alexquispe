@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { Todo } from "../interfaces/todo";
+import { TodoService } from "../services/todo.service.ts";
 
 export const useTodoStore = defineStore("todo", {
   state: () => ({
@@ -10,11 +11,15 @@ export const useTodoStore = defineStore("todo", {
       data: [] as Array<Todo>,
     },
   }),
-  getters: {},
+  getters: {
+    todos: (state) => state.list.data,
+  },
   actions: {
     async getTodos() {
-      try {
-      } catch (error) {}
+      const response = await TodoService.getTodos();
+      const { result = undefined } = response.data;
+      console.log({ result });
+      this.list.data = result;
     },
   },
 });

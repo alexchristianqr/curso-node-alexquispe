@@ -1,7 +1,9 @@
+import { httpAdapterService } from "../../../core/services";
+
 export class TodoService {
-  async getTodos() {
+  static async getTodos() {
     try {
-      return null;
+      return await httpAdapterService.get("/todo");
     } catch (error) {
       return error;
     }
