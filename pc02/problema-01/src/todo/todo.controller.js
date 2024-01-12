@@ -10,6 +10,16 @@ class TodoController {
       return errorHandler({ req, res, error });
     }
   }
+
+  async createTodo(req, res) {
+    try {
+      const data = req.body;
+      const result = await todoService.create(data);
+      return responseHandler({ req, res }, result);
+    } catch (error) {
+      return errorHandler({ req, res, error });
+    }
+  }
 }
 
 export const todoController = new TodoController();
