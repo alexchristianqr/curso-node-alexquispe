@@ -7,14 +7,14 @@ const { createTodo, updateTodo, deleteTodo } = useTodoStore();
 
 const props = defineProps<{
   configForm?: ConfigForm;
-  payloadForm?: Todo;
+  payloadForms?: Todo;
 }>();
 const statuses = [
   { value: "todo", label: "Por hacer" },
   { value: "in_progress", label: "En progreso" },
   { value: "complete", label: "Completado" },
 ];
-const payloadForm = reactive<Todo>(props.payloadForm);
+const payloadForm = reactive<Todo | any>(props.payloadForms);
 
 const onRegister = (data: any) => {
   createTodo(data);
@@ -38,7 +38,7 @@ const onRemove = (data: any) => {
   <q-form class="q-gutter-md">
     <q-input outlined v-model="payloadForm.description" label="Descripción" />
 
-    <q-select outlined v-model="payloadForm.status" :options="statuses" map-options label="Outlined" emit-value />
+    <q-select outlined v-model="payloadForm.status" :options="statuses" map-options label="Estado" emit-value />
 
     <q-btn outline color="primary" label="Guardar" v-if="props.configForm?.action === 'register'" @click="onRegister(payloadForm)" />
     <q-btn outline color="secondary" label="Actualizar" v-if="props.configForm?.action === 'edit'" @click="onEdit(payloadForm)" />

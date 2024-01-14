@@ -3,13 +3,22 @@ import { storeToRefs } from "pinia";
 import { useTodoStore } from "../store";
 import { onMounted, reactive, ref } from "vue";
 import TodoForm from "./TodoForm.vue";
-import { Todo } from "../interfaces";
+import { ConfigForm, Todo } from "../interfaces";
 
 const { todos } = storeToRefs(useTodoStore());
 const { getTodos } = useTodoStore();
 
-const configForm = ref({ action: "register" });
+const configForm = ref<ConfigForm>({ action: "register" });
 const payloadForm = reactive<Todo>({});
+
+const columnss = [
+  { name: "description", label: "Descripción", field: "description", sortable: true, align: "left" },
+  { name: "status", label: "Estado", field: "status", sortable: true, align: "left" },
+  { name: "created_at", label: "Fecha creado", field: "created_at", sortable: true, align: "left" },
+  { name: "updated_at", label: "Fecha actualizado", field: "updated_at", sortable: true, align: "left" },
+  { name: "actions", label: "Acciones", field: "actions", sortable: false, align: "left" },
+];
+const rows = todos;
 
 onMounted(() => {
   getTodos();
@@ -24,7 +33,6 @@ const editForm = (data: Todo) => {
   payloadForm.status = data.status;
   payloadForm.created_at = data.created_at;
 };
-
 const removeForm = (data: Todo) => {
   configForm.value.action = "remove";
   payloadForm._id = data._id;
@@ -37,7 +45,7 @@ const removeForm = (data: Todo) => {
 <template>
   <h2>Formulario</h2>
 
-  <TodoForm :configForm="configForm" :payloadForm="payloadForm" @register="" />
+  <TodoForm :configForm="configForm" :payloadForms="payloadForm" />
 
   <h2>Listado</h2>
 
@@ -46,41 +54,21 @@ const removeForm = (data: Todo) => {
   <!--  </div>-->
 
   <div>
-    <table>
-      <thead>
-        <tr>
-          <td style="border: solid 1px">Descripcion</td>
-          <td style="border: solid 1px">Fecha creado</td>
-          <td style="border: solid 1px">Estado</td>
-          <td style="border: solid 1px">Acciones</td>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="todo in todos">
-          <td>{{ todo.description }}</td>
-          <td>{{ todo.created_at }}</td>
-          <td>
-            <span v-if="todo.status === 'todo'" style="color: yellow; background-color: black">Por hacer</span>
-            <span v-if="todo.status === 'in_progress'" style="color: cyan; background-color: black">En progreso</span>
-            <span v-if="todo.status === 'complete'" style="color: red; background-color: black">Completado</span>
-          </td>
-          <td>
-            <template v-if="todo.status == 'complete'">
-              <button disabled>editar</button>
-              <button disabled>eliminar</button>
-            </template>
-            <template v-if="todo.status == 'in_progress'">
-              <button @click="editForm(todo)">editar</button>
-              <button disabled>eliminar</button>
-            </template>
-            <template v-if="todo.status == 'todo'">
-              <button @click="editForm(todo)">editar</button>
-              <button @click="removeForm(todo)">eliminar</button>
-            </template>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <q-table :columns="columnss" :rows="rows" bordered flat row-key="name">
+      <template v-slot:body-cell-status="props">
+        <q-td :props="props">
+          <q-badge color="warning" v-if="props.row.status === 'todo'">Por hacer</q-badge>
+          <q-badge color="purple" v-if="props.row.status === 'in_progress'">En progreso</q-badge>
+          <q-badge color="green" v-if="props.row.status === 'complete'">Completado</q-badge>
+        </q-td>
+      </template>
+      <template v-slot:body-cell-actions="props">
+        <q-td :props="props">
+          <q-btn flat round icon="edit" color="primary" @click="editForm(props.row)" />
+          <q-btn flat round icon="delete" color="primary" @click="removeForm(props.row)" />
+        </q-td>
+      </template>
+    </q-table>
   </div>
 </template>
 
