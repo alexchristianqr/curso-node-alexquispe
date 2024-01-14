@@ -9,12 +9,14 @@ class TodoService {
   }
   async create(data) {
     const { payload } = data;
+    payload.created_at = new Date();
     return Todo.create(payload);
   }
   async update(id, data) {
     const { payload = {} } = data;
     payload.updated_at = new Date();
-    return Todo.updateOne({ _id: id }, payload);
+    await Todo.updateOne({ _id: id }, payload);
+    return this.getById(id);
   }
   async updateField(id, data) {
     const { payload } = data;

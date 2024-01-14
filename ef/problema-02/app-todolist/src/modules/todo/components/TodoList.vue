@@ -18,7 +18,7 @@ const columnss = [
   { name: "updated_at", label: "Fecha actualizado", field: "updated_at", sortable: true, align: "left" },
   { name: "actions", label: "Acciones", field: "actions", sortable: false, align: "left" },
 ];
-const rows = todos;
+// const rows = todos;
 
 onMounted(() => {
   getTodos();
@@ -46,7 +46,7 @@ const removeForm = (data: Todo) => {
 <template>
   <h2>Formulario</h2>
 
-  <TodoForm :configForm="configForm" :payloadForms="payloadForm" />
+  <TodoForm :configForm="configForm" :payloadForm="payloadForm" />
 
   <h2>Listado</h2>
 
@@ -55,7 +55,7 @@ const removeForm = (data: Todo) => {
   <!--  </div>-->
 
   <div>
-    <q-table :columns="columnss" :rows="rows" bordered flat row-key="name">
+    <q-table :columns="columnss" :rows="todos" bordered flat row-key="name">
       <template v-slot:body-cell-status="props">
         <q-td :props="props">
           <q-badge color="warning" v-if="props.row.status === 'todo'">Por hacer</q-badge>
@@ -66,7 +66,7 @@ const removeForm = (data: Todo) => {
       <template v-slot:body-cell-actions="props">
         <q-td :props="props">
           <q-btn flat round icon="edit" color="primary" @click="editForm(props.row)" :disable="props.row.status === 'complete'" />
-          <q-btn flat round icon="delete" color="primary" @click="removeForm(props.row)" :disable="props.row.status === 'in_progress' || props.row.status === 'complete'" />
+          <q-btn flat round icon="delete" color="primary" @click="removeForm(props.row)" :disable="props.row.status === 'in_progress'" />
         </q-td>
       </template>
     </q-table>

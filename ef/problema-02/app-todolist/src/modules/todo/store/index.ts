@@ -13,26 +13,28 @@ export const useTodoStore = defineStore("todo", {
   },
   actions: {
     async getTodos() {
-      const response = await TodoService.getTodos();
-      const { result = undefined } = response.data;
+      const { result } = await TodoService.getTodos();
       this.list.data = result;
     },
     async createTodo(payload: Todo) {
-      const response = await TodoService.createTodo(payload);
-      const { result = undefined } = response.data;
+      const { result } = await TodoService.createTodo(payload);
       this.list.data.unshift(result);
     },
     async updateTodo(payload: Todo) {
-      await TodoService.updateTodo(payload);
-      const item = this.list.data.find((item) => item._id == payload._id);
+      // console.log(payload._id, "[updateTodo]");
+      const id = payload._id;
+      const { result } = await TodoService.updateTodo(payload);
+      const item = this.list.data.find((item) => item._id == id);
       if (!item) return;
-      item.description = payload.description;
-      item.status = payload.status;
-      item.updated_at = payload.updated_at;
+      item.description = result.description;
+      item.status = result.status;
+      item.created_at = result.created_at;
+      item.updated_at = result.updated_at;
     },
     async deleteTodo(payload: Todo) {
+      const id = payload._id;
       await TodoService.deleteTodo(payload);
-      this.list.data = this.list.data.filter((item) => item._id !== payload._id);
+      this.list.data = this.list.data.filter((item) => item._id !== id);
     },
   },
 });
