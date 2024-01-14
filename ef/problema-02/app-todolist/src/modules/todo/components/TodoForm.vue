@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { reactive } from "vue";
+import { onMounted, reactive, ref } from "vue";
 import { ConfigForm, Todo } from "../interfaces";
 import { useTodoStore } from "../store";
 
 const { createTodo, updateTodo, deleteTodo } = useTodoStore();
 
 const props = defineProps<{
-  configForm?: ConfigForm;
+  configForm: ConfigForm;
   payloadForms?: Todo;
 }>();
 const statuses = [
@@ -16,17 +16,32 @@ const statuses = [
 ];
 const payloadForm = reactive<Todo | any>(props.payloadForms);
 
+const actionForm = ref<any>({});
+
+onMounted(() => {
+  actionForm.value = props.configForm;
+  console.log(actionForm.value.action);
+});
+
 const onRegister = (data: any) => {
   createTodo(data);
-  window.location.reload();
+  onReset();
 };
 const onEdit = (data: any) => {
   updateTodo(data);
-  window.location.reload();
+  onReset();
 };
 const onRemove = (data: any) => {
   deleteTodo(data);
-  window.location.reload();
+  onReset();
+};
+const onReset = () => {
+  payloadForm._id = undefined;
+  payloadForm.description = null;
+  payloadForm.status = "todo";
+  payloadForm.created_at = null;
+  payloadForm.updated_at = null;
+  actionForm.value.action = "register";
 };
 </script>
 
@@ -40,11 +55,11 @@ const onRemove = (data: any) => {
 
     <q-select outlined v-model="payloadForm.status" :options="statuses" map-options label="Estado" emit-value />
 
-    <q-btn outline color="primary" label="Guardar" v-if="props.configForm?.action === 'register'" @click="onRegister(payloadForm)" />
-    <q-btn outline color="secondary" label="Actualizar" v-if="props.configForm?.action === 'edit'" @click="onEdit(payloadForm)" />
-    <q-btn outline color="red" label="Eliminar" v-if="props.configForm?.action === 'remove'" @click="onRemove(payloadForm)" />
-    <q-btn outline color="purple" label="Cancelar" v-if="props.configForm?.action === 'edit' || props.configForm?.action === 'remove'" @click="onRemove(payloadForm)" />
-    <q-btn outline color="standard" label="Nuevo" v-if="props.configForm?.action !== 'register'" @click="onRemove(payloadForm)" />
+    <q-btn outline color="primary" label="Guardar" v-if="actionForm.action === 'register'" @click="onRegister(payloadForm)" />
+    <q-btn outline color="secondary" label="Actualizar" v-if="actionForm.action === 'edit'" @click="onEdit(payloadForm)" />
+    <q-btn outline color="red" label="Eliminar" v-if="actionForm.action === 'remove'" @click="onRemove(payloadForm)" />
+    <q-btn outline color="purple" label="Cancelar" v-if="actionForm.action === 'edit' || actionForm.action === 'remove'" @click="onRemove(payloadForm)" />
+    <q-btn outline color="standard" label="Nuevo" v-if="actionForm.action !== 'register'" @click="onRemove(payloadForm)" />
   </q-form>
 </template>
 

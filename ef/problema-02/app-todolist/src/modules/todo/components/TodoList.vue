@@ -32,6 +32,7 @@ const editForm = (data: Todo) => {
   payloadForm.description = data.description;
   payloadForm.status = data.status;
   payloadForm.created_at = data.created_at;
+  payloadForm.updated_at = data.updated_at;
 };
 const removeForm = (data: Todo) => {
   configForm.value.action = "remove";
@@ -64,8 +65,8 @@ const removeForm = (data: Todo) => {
       </template>
       <template v-slot:body-cell-actions="props">
         <q-td :props="props">
-          <q-btn flat round icon="edit" color="primary" @click="editForm(props.row)" />
-          <q-btn flat round icon="delete" color="primary" @click="removeForm(props.row)" />
+          <q-btn flat round icon="edit" color="primary" @click="editForm(props.row)" :disable="props.row.status === 'complete'" />
+          <q-btn flat round icon="delete" color="primary" @click="removeForm(props.row)" :disable="props.row.status === 'in_progress' || props.row.status === 'complete'" />
         </q-td>
       </template>
     </q-table>
