@@ -11,14 +11,14 @@ const { getTodos } = useTodoStore();
 const configForm = ref<ConfigForm>({ action: "register" });
 const payloadForm = reactive<Todo>({});
 
-const columnss = [
+const columns = [
   { name: "description", label: "Descripción", field: "description", sortable: true, align: "left" },
-  { name: "status", label: "Estado", field: "status", sortable: true, align: "left" },
+  { name: "status", label: "Estado", field: "status", sortable: false, align: "left" },
   { name: "created_at", label: "Fecha creado", field: "created_at", sortable: true, align: "left" },
   { name: "updated_at", label: "Fecha actualizado", field: "updated_at", sortable: true, align: "left" },
   { name: "actions", label: "Acciones", field: "actions", sortable: false, align: "left" },
 ];
-// const rows = todos;
+const rows = todos;
 
 onMounted(() => {
   getTodos();
@@ -44,18 +44,18 @@ const removeForm = (data: Todo) => {
 </script>
 
 <template>
-  <h2>Formulario</h2>
+  <h4>Formulario</h4>
 
   <TodoForm :configForm="configForm" :payloadForm="payloadForm" />
 
-  <h2>Listado</h2>
+  <h4>Listado</h4>
 
-  <!--  <div style="border: solid 1px; padding: 0.5rem; margin: 1rem 0 1rem 0">-->
+  <!--  <div class="q-px-md q-py-md bg-dark text-white q-my-md">-->
   <!--    <pre>{{ todos }}</pre>-->
   <!--  </div>-->
 
   <div>
-    <q-table :columns="columnss" :rows="todos" bordered flat row-key="name">
+    <q-table :columns="columns" :rows="rows" bordered flat row-key="name">
       <template v-slot:body-cell-status="props">
         <q-td :props="props">
           <q-badge color="warning" v-if="props.row.status === 'todo'">Por hacer</q-badge>

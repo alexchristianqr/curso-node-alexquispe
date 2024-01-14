@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { Todo } from "../interfaces";
-import { TodoService } from "../services/todo.service.ts";
+import { todoService } from "../services/todo.service.ts";
 
 export const useTodoStore = defineStore("todo", {
   state: () => ({
@@ -13,17 +13,16 @@ export const useTodoStore = defineStore("todo", {
   },
   actions: {
     async getTodos() {
-      const { result } = await TodoService.getTodos();
+      const { result } = await todoService.getTodos();
       this.list.data = result;
     },
     async createTodo(payload: Todo) {
-      const { result } = await TodoService.createTodo(payload);
+      const { result } = await todoService.createTodo(payload);
       this.list.data.unshift(result);
     },
     async updateTodo(payload: Todo) {
-      // console.log(payload._id, "[updateTodo]");
       const id = payload._id;
-      const { result } = await TodoService.updateTodo(payload);
+      const { result } = await todoService.updateTodo(payload);
       const item = this.list.data.find((item) => item._id == id);
       if (!item) return;
       item.description = result.description;
@@ -33,7 +32,7 @@ export const useTodoStore = defineStore("todo", {
     },
     async deleteTodo(payload: Todo) {
       const id = payload._id;
-      await TodoService.deleteTodo(payload);
+      await todoService.deleteTodo(payload);
       this.list.data = this.list.data.filter((item) => item._id !== id);
     },
   },

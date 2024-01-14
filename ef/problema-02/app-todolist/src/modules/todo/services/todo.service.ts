@@ -1,8 +1,8 @@
 import { httpAdapterService } from "../../../core/services";
 import { Todo } from "../interfaces";
 
-export class TodoService {
-  static async getTodos() {
+class TodoService {
+  async getTodos() {
     try {
       const response = await httpAdapterService.get("/todo");
       return response.data;
@@ -10,9 +10,8 @@ export class TodoService {
       return error;
     }
   }
-  static async createTodo(payload: Todo) {
+  async createTodo(payload: Todo) {
     try {
-      payload.created_at = new Date();
       const data = {
         payload,
       };
@@ -22,9 +21,8 @@ export class TodoService {
       return error;
     }
   }
-  static async updateTodo(payload: Todo) {
+  async updateTodo(payload: Todo) {
     try {
-      payload.updated_at = new Date();
       const data = {
         payload,
       };
@@ -34,7 +32,7 @@ export class TodoService {
       return error;
     }
   }
-  static async deleteTodo(payload: Todo) {
+  async deleteTodo(payload: Todo) {
     try {
       const data = {
         payload,
@@ -46,3 +44,4 @@ export class TodoService {
     }
   }
 }
+export const todoService = new TodoService();

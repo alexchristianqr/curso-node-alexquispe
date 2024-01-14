@@ -1,3 +1,5 @@
+import { HttpStatusCode } from "../enums/index.js";
+
 export function responseHandler({ req, res }, data) {
   return res.json({
     success: true,
@@ -6,8 +8,9 @@ export function responseHandler({ req, res }, data) {
   });
 }
 
-export function errorHandler({ req = undefined, res = undefined, error = Error }) {
-  res.status(error.statusCode).send({
+export function errorHandler({ req = undefined, res, error = Error }) {
+  const statusCode = error.statusCode ? error.statusCode : HttpStatusCode.INTERNAL_SERVER_ERROR;
+  res.status(statusCode).send({
     success: false,
     error: error.message,
     created_at: new Date(),

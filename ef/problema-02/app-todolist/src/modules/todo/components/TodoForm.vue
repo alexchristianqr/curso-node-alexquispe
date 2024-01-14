@@ -40,7 +40,7 @@ const onReset = () => {
 </script>
 
 <template>
-  <!--  <div style="border: solid 1px; padding: 0.5rem; margin: 1rem 0 1rem 0">-->
+  <!--  <div class="q-px-md q-py-md bg-dark text-white q-my-md">-->
   <!--    <pre>{{ payloadForm }}</pre>-->
   <!--  </div>-->
 
@@ -53,10 +53,10 @@ const onReset = () => {
       <q-select outlined v-model="payloadForm.status" :options="statuses" map-options label="Estado" emit-value />
     </template>
 
-    <q-btn outline color="primary" label="Guardar" v-if="actionForm.action === 'register'" @click="onRegister(payloadForm)" />
-    <q-btn outline color="secondary" label="Actualizar" v-if="actionForm.action === 'edit'" @click="onEdit(payloadForm)" />
-    <q-btn outline color="red" label="Eliminar" v-if="actionForm.action === 'remove'" @click="onRemove(payloadForm)" />
-    <q-btn outline color="purple" label="Cancelar" v-if="actionForm.action === 'edit' || actionForm.action === 'remove'" @click="onReset()" />
+    <q-btn color="primary" label="Guardar" v-if="actionForm.action === 'register'" @click="onRegister(payloadForm)" />
+    <q-btn color="secondary" label="Actualizar" v-if="actionForm.action === 'edit'" @click="onEdit(payloadForm)" />
+    <q-btn color="red" label="Eliminar" v-if="actionForm.action === 'remove'" @click="onRemove(payloadForm)" />
+    <q-btn outline color="primary" label="Cancelar" v-if="actionForm.action === 'edit' || actionForm.action === 'remove'" @click="onReset()" />
   </q-form>
 </template>
 
