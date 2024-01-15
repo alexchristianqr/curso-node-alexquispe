@@ -1,5 +1,5 @@
 import { User } from "./user.schema.js";
-import { signJwtToken } from "../core/utils/index.js";
+import { signJwtToken, hashedPassword } from "../core/utils/index.js";
 
 class UserService {
   async getAll() {
@@ -7,7 +7,7 @@ class UserService {
   }
   async create(data) {
     const { payload } = data;
-    payload.created_at = new Date();
+    payload.password = hashedPassword(payload.password);
     payload.revoked = false;
     const user = payload;
 
