@@ -22,22 +22,26 @@ export async function validateBearerToken(req, res, next) {
     const oauthAccessToken = await User.findOne(queryOauthAccessToken);
     if (!oauthAccessToken) return res.status(401).json({ message: "access unauthorized" });
 
+    const userId = oauthAccessToken._id;
+
     // Validar fecha de expiración de token de acceso / No validará si está en modo desarrollo
-    const validateExpirationAccessToken = oauthAccessToken.expires_at >= new Date();
-    if (!validateExpirationAccessToken && !envDevelopment) {
+    const validateExpAccessToken = oauthAccessToken.expires_at >= new Date();
+    if (!validateExpAccessToken && !envDevelopment) {
       // Set user updated
       const userUpdated = {
         access_token: null, // Token de acceso
         refresh_token: null, // Token de actualización
-        expires_at: null,
+        expires_at: null, // Fecha de expiración
+        revoked: true, // Token revocado
+        refresh_at: new Date(), // Fecha token actualizado
       };
-      await User.updateOne({ _id: oauthAccessToken.userId }, userUpdated);
+      await User.updateOne({ _id: userId }, userUpdated);
       return res.status(401).json({ message: "access unauthorized" });
     }
 
     // Buscar usuario autenticado
     const user = await User.findOne({
-      _id: oauthAccessToken.userId, // ObjectId()
+      _id: userId, // ObjectId()
       status: "active",
     });
 

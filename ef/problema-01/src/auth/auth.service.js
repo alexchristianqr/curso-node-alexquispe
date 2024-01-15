@@ -38,11 +38,15 @@ class AuthService {
       {
         access_token: access_token,
         expires_at: new Date(expires_at),
+        refresh_at: new Date(),
+        revoked: false,
       },
     );
 
-    // return userService.getById(userId);
-    return true;
+    return {
+      access_token: access_token,
+      expires_at: expires_at,
+    };
   }
 }
 

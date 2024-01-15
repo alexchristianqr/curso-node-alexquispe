@@ -9,8 +9,9 @@ const UserSchema = mongoose.Schema({
   status: { type: String, enum: ["active", "inactive", "deleted"], default: "active" },
   revoked: { type: Boolean, default: true },
   expires_at: { type: Date, default: null },
+  refresh_at: { type: Date, default: null },
   created_at: { type: Date, default: Date.now(), required: true },
-  updated_at: { type: Date },
+  updated_at: { type: Date, default: null },
 });
 
 export const User = mongoose.model("user", UserSchema);
