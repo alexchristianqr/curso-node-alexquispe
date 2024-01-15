@@ -5,8 +5,12 @@ class UserService {
   async getAll() {
     return User.find();
   }
+  async getById(id) {
+    return User.findOne({ _id: id });
+  }
   async create(data) {
     const { payload } = data;
+
     payload.password = hashedPassword(payload.password);
     payload.revoked = false;
     const user = payload;

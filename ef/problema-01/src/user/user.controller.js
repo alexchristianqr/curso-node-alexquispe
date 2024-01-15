@@ -10,6 +10,15 @@ class UserController {
       return errorHandler({ req, res, error });
     }
   }
+  async getUserById(req, res) {
+    try {
+      const { id } = req.params;
+      const result = await userService.getById(id);
+      return responseHandler({ req, res }, result);
+    } catch (error) {
+      return errorHandler({ req, res, error });
+    }
+  }
   async createUser(req, res) {
     try {
       const data = req.body;
