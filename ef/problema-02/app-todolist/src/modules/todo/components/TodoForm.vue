@@ -20,19 +20,26 @@ const actionForm = computed(() => props.configForm);
 const descriptionRef = ref();
 const statusRef = ref();
 const uuidRef = ref();
+const loading = ref(false);
 
-const onSubmit = (payload: any) => {
+const loadingSubmit = async (stateLoading: boolean) => {
+  return (loading.value = stateLoading);
+};
+const onSubmit = async (payload: any) => {
+  await loadingSubmit(true);
   if (actionForm.value.action === "register") {
-    onRegister(payload);
-  } else if (actionForm.value.action === "edit") {
-    onEdit(payload);
-  } else if (actionForm.value.action === "remove") {
-    onRemove(payload);
-  } else {
-    return;
+    await onRegister(payload);
   }
+  if (actionForm.value.action === "edit") {
+    await onEdit(payload);
+  }
+  if (actionForm.value.action === "remove") {
+    await onRemove(payload);
+  }
+  await loadingSubmit(false);
 };
 const onRegister = async (payload: any) => {
+  loading.value = true;
   await createTodo(payload);
   onReset();
 };
@@ -71,10 +78,16 @@ const onReset = () => {
       <q-select :ref="statusRef" outlined v-model="payloadForm.status" :options="statuses" map-options label="Estado" emit-value :rules="[(val) => !!val || 'Campo obligatorio']" />
     </template>
 
-    <q-btn type="submit" color="primary" label="Guardar" v-if="actionForm.action === 'register'" />
-    <q-btn type="submit" color="secondary" label="Actualizar" v-if="actionForm.action === 'edit'" />
-    <q-btn type="submit" color="red" label="Eliminar" v-if="actionForm.action === 'remove'" />
-    <q-btn type="reset" outline color="primary" label="Cancelar" />
+    <q-btn type="submit" color="primary" label="Guardar" v-if="actionForm.action === 'register'" :loading="loading" :disable="loading">
+      <template v-slot:loading><q-spinner /></template>
+    </q-btn>
+    <q-btn type="submit" color="secondary" label="Actualizar" v-if="actionForm.action === 'edit'" :loading="loading" :disable="loading">
+      <template v-slot:loading><q-spinner /></template>
+    </q-btn>
+    <q-btn type="submit" color="red" label="Eliminar" v-if="actionForm.action === 'remove'" :loading="loading" :disable="loading">
+      <template v-slot:loading><q-spinner /></template>
+    </q-btn>
+    <q-btn type="reset" outline color="primary" label="Cancelar" :disable="loading" />
   </q-form>
 </template>
 
