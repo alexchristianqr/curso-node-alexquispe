@@ -1,6 +1,6 @@
 import { User } from "../user/user.schema.js";
 import { compareHashedPassword, signJwtToken } from "../core/utils/index.js";
-// import { userService } from "../user/user.service.js";
+import { httpStatusCodes } from "../core/enums/index.js";
 
 class AuthService {
   async signIn(data) {
@@ -12,7 +12,7 @@ class AuthService {
     if (!user) {
       throw {
         message: "El email o contraseña son incorrectos",
-        status: 401,
+        status: httpStatusCodes.UNAUTHORIZED,
       };
     }
 
@@ -24,7 +24,7 @@ class AuthService {
     if (!equals) {
       throw {
         message: "El email o contraseña son incorrectos",
-        status: 401,
+        status: httpStatusCodes.UNAUTHORIZED,
       };
     }
 
