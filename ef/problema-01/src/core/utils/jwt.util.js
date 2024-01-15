@@ -18,8 +18,6 @@ export async function signJwtToken({ user = {}, timeExpiresAt = 0.05, oauthAcces
     access_token = JWT.sign(payload, secret, { expiresIn: expires_at.getTime() });
   }
 
-  console.log({ access_token, expires_at });
-
   return {
     access_token,
     expires_at,
