@@ -32,24 +32,22 @@ const onSubmit = (payload: any) => {
     return;
   }
 };
-const onRegister = (payload: any) => {
-  createTodo(payload);
+const onRegister = async (payload: any) => {
+  await createTodo(payload);
   onReset();
 };
-const onEdit = (payload: any) => {
-  updateTodo(payload);
+const onEdit = async (payload: any) => {
+  await updateTodo(payload);
   onReset();
 };
-const onRemove = (payload: any) => {
-  deleteTodo(payload);
+const onRemove = async (payload: any) => {
+  await deleteTodo(payload);
   onReset();
 };
 const onReset = () => {
   payloadForm.value._id = undefined;
-  payloadForm.value.description = "";
+  payloadForm.value.description = null;
   payloadForm.value.status = "todo";
-  payloadForm.value.created_at = null;
-  payloadForm.value.updated_at = null;
 
   actionForm.value.action = "register";
 
@@ -76,7 +74,7 @@ const onReset = () => {
     <q-btn type="submit" color="primary" label="Guardar" v-if="actionForm.action === 'register'" />
     <q-btn type="submit" color="secondary" label="Actualizar" v-if="actionForm.action === 'edit'" />
     <q-btn type="submit" color="red" label="Eliminar" v-if="actionForm.action === 'remove'" />
-    <q-btn type="reset" outline color="primary" label="Cancelar" v-if="actionForm.action === 'edit' || actionForm.action === 'remove'" />
+    <q-btn type="reset" outline color="primary" label="Cancelar" />
   </q-form>
 </template>
 
