@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 
 import { todoRoute } from "./src/todo/todo.route.js";
+import { userRoute } from "./src/user/user.route.js";
 
 config();
 const app = express();
@@ -18,7 +19,7 @@ const corsOptions = {
 app.use(express.json());
 app.use(morgan("tiny"));
 app.use(cors(corsOptions));
-app.use("/api/v1/", [todoRoute]);
+app.use("/api/v1/", [todoRoute, userRoute]);
 
 app.get("/", (req, res) => {
   res.send("<h2>Welcome to API TODO</h2> <div>by <a href='https://github.com/alexchristianqr'>Alex Christian</a></div>.");

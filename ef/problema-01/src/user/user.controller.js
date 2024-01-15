@@ -1,9 +1,10 @@
 import { errorHandler, responseHandler } from "../core/utils/index.js";
+import { userService } from "./user.service.js";
 
 class UserController {
   async getUsers(req, res) {
     try {
-      const result = null;
+      const result = await userService.getAll();
       return responseHandler({ req, res }, result);
     } catch (error) {
       return errorHandler({ req, res, error });
@@ -11,7 +12,8 @@ class UserController {
   }
   async createUser(req, res) {
     try {
-      const result = null;
+      const data = req.body;
+      const result = await userService.create(data);
       return responseHandler({ req, res }, result);
     } catch (error) {
       return errorHandler({ req, res, error });
