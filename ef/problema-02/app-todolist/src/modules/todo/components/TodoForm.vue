@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, reactive } from "vue";
+import { computed, ref } from "vue";
 import { ConfigForm, Todo } from "../interfaces";
 import { useTodoStore } from "../store";
 
@@ -14,9 +14,24 @@ const statuses = [
   { value: "in_progress", label: "En progreso" },
   { value: "complete", label: "Completado" },
 ];
-const payloadForm = reactive<Todo | any>(props.payloadForm);
+const payloadForm = ref<Todo | any>(props.payloadForm);
 const actionForm = computed(() => props.configForm);
 
+const descriptionRef = ref();
+const statusRef = ref();
+const uuidRef = ref();
+
+const onSubmit = (payload: any) => {
+  if (actionForm.value.action === "register") {
+    onRegister(payload);
+  } else if (actionForm.value.action === "edit") {
+    onEdit(payload);
+  } else if (actionForm.value.action === "remove") {
+    onRemove(payload);
+  } else {
+    return;
+  }
+};
 const onRegister = (payload: any) => {
   createTodo(payload);
   onReset();
@@ -30,12 +45,17 @@ const onRemove = (payload: any) => {
   onReset();
 };
 const onReset = () => {
-  payloadForm._id = undefined;
-  payloadForm.description = null;
-  payloadForm.status = "todo";
-  payloadForm.created_at = null;
-  payloadForm.updated_at = null;
+  payloadForm.value._id = undefined;
+  payloadForm.value.description = "";
+  payloadForm.value.status = "todo";
+  payloadForm.value.created_at = null;
+  payloadForm.value.updated_at = null;
+
   actionForm.value.action = "register";
+
+  if (uuidRef.value) uuidRef.value.resetValidation();
+  if (descriptionRef.value) descriptionRef.value.resetValidation();
+  if (statusRef.value) statusRef.value.resetValidation();
 };
 </script>
 
@@ -44,19 +64,19 @@ const onReset = () => {
   <!--    <pre>{{ payloadForm }}</pre>-->
   <!--  </div>-->
 
-  <q-form class="q-gutter-md">
+  <q-form class="q-gutter-md" @submit.prevent.stop="onSubmit(payloadForm)" @reset="onReset">
     <template v-if="actionForm.action === 'remove'">
-      <q-input outlined v-model="payloadForm._id" disable label="Descripción" />
+      <q-input :ref="uuidRef" outlined v-model="payloadForm._id" disable label="UUID" :rules="[(val) => !!val || 'Campo obligatorio']" />
     </template>
     <template v-else>
-      <q-input outlined v-model="payloadForm.description" label="Descripción" />
-      <q-select outlined v-model="payloadForm.status" :options="statuses" map-options label="Estado" emit-value />
+      <q-input :ref="descriptionRef" outlined v-model="payloadForm.description" label="Descripción" :rules="[(val) => !!val || 'Campo obligatorio']" />
+      <q-select :ref="statusRef" outlined v-model="payloadForm.status" :options="statuses" map-options label="Estado" emit-value :rules="[(val) => !!val || 'Campo obligatorio']" />
     </template>
 
-    <q-btn color="primary" label="Guardar" v-if="actionForm.action === 'register'" @click="onRegister(payloadForm)" />
-    <q-btn color="secondary" label="Actualizar" v-if="actionForm.action === 'edit'" @click="onEdit(payloadForm)" />
-    <q-btn color="red" label="Eliminar" v-if="actionForm.action === 'remove'" @click="onRemove(payloadForm)" />
-    <q-btn outline color="primary" label="Cancelar" v-if="actionForm.action === 'edit' || actionForm.action === 'remove'" @click="onReset()" />
+    <q-btn type="submit" color="primary" label="Guardar" v-if="actionForm.action === 'register'" />
+    <q-btn type="submit" color="secondary" label="Actualizar" v-if="actionForm.action === 'edit'" />
+    <q-btn type="submit" color="red" label="Eliminar" v-if="actionForm.action === 'remove'" />
+    <q-btn type="reset" outline color="primary" label="Cancelar" v-if="actionForm.action === 'edit' || actionForm.action === 'remove'" />
   </q-form>
 </template>
 
