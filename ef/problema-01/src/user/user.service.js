@@ -1,5 +1,5 @@
 import { User } from "./user.schema.js";
-import { signJwtToken } from "../core/utils/jwt.util.js";
+import { signJwtToken } from "../core/utils/index.js";
 
 class UserService {
   async getAll() {
