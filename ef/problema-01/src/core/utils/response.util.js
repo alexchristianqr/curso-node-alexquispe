@@ -8,7 +8,7 @@ export function responseHandler({ req, res }, data) {
   });
 }
 
-export function errorHandler({ req = undefined, res, error = Error }) {
+export function errorHandler({ req, res, error = Error }) {
   const statusCode = error.statusCode ? error.statusCode : HttpStatusCode.INTERNAL_SERVER_ERROR;
   res.status(statusCode).send({
     success: false,
