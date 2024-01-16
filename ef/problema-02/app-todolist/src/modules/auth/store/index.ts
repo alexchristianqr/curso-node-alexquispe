@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { authService } from "../services/auth.service.ts";
 import { qalertNotify } from "../../../core/utils";
-import { User } from "../interfaces";
+import { ActionSignIn, ActionSignOut, User } from "../interfaces";
 import { httpAdapterService } from "../../../core/services";
 
 export const useAuthStore = defineStore("auth", {
@@ -18,7 +18,7 @@ export const useAuthStore = defineStore("auth", {
     loggedIn: (state) => state.auth.loggedIn,
   },
   actions: {
-    async signIn(payload: any) {
+    async signIn(payload: ActionSignIn) {
       const { result } = await authService.signIn(payload);
       this.auth.user = result.user;
       this.auth.accessToken = result.user.access_token;
@@ -32,12 +32,12 @@ export const useAuthStore = defineStore("auth", {
     },
     async signOut() {
       if (this.auth.user._id) {
-        const payload = {
+        const payload: ActionSignOut = {
           userId: this.auth.user._id,
         };
         await authService.signOut(payload);
       }
-      this.auth.user = { _id: "", fullname: null, access_token: null, expires_at: null };
+      this.auth.user = { _id: "", fullname: null, access_token: null, expires_at: null, status: null };
       this.auth.accessToken = null;
       this.auth.loggedIn = false;
 

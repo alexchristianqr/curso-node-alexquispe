@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { PayloadLoginForm } from "../interfaces";
+import { ActionSignIn } from "../interfaces";
 import { useAuthStore } from "../store";
 
 const { signIn } = useAuthStore();
@@ -10,7 +10,7 @@ const passwordRef = ref();
 const loading = ref(false);
 const isPwd = ref(true);
 
-const payloadForm = ref<PayloadLoginForm>({ username: "acqrdeveloper@gmail.com", password: "admin123" });
+const payloadForm = ref<ActionSignIn>({ username: null, password: null });
 
 const loadingSubmit = async (stateLoading: boolean) => {
   return (loading.value = stateLoading);

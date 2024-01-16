@@ -1,14 +1,10 @@
 export interface ActionSignIn {
-  payload: {
-    username: string | null;
-    password: string | null;
-  };
+  username: string | null;
+  password: string | null;
 }
 
 export interface ActionSignOut {
-  payload: {
-    userId: string | null;
-  };
+  userId: string | null;
 }
 
 export interface User {
