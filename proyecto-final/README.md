@@ -4,13 +4,13 @@ https://documenter.getpostman.com/view/3683906/2s9YsNdAJc
 ## Pasos para correr el backend en local
 ```shell
 # Ubicarse en la carpeta raiz y ejecutar
-cd ef/problema-01
+cd proyecto-final/backend
 npm run start
 ```
 
 ## Pasos para correr el frontend en local
 ```shell
 # Ubicarse en la carpeta raiz y ejecutar
-cd ef/problema-02/app-todolist
+cd proyecto-final/frontend/app-todolist
 npm run dev
 ```
