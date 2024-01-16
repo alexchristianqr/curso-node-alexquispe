@@ -19,4 +19,5 @@ app.use(Quasar, {
   },
 });
 app.use(pinia);
+
 app.mount("#app");
