@@ -1,5 +1,6 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosStatic, isAxiosError } from "axios";
 import { ErrorResponseService } from "../responses";
+const endpoint = import.meta.env.VITE_ENDPOINT_API;
 
 interface CI_AxiosRequestConfig extends AxiosRequestConfig {
   headers?: Record<string, string>;
@@ -83,4 +84,4 @@ class HttpAdapterService {
   }
 }
 
-export const httpAdapterService = new HttpAdapterService("http://localhost:3000/api/v1");
+export const httpAdapterService = new HttpAdapterService(endpoint);

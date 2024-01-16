@@ -7,7 +7,7 @@ import { createPinia } from "pinia";
 const pinia = createPinia();
 
 // QUASAR STYLES
-import { Quasar, Notify } from "quasar";
+import { Quasar, Notify } from "quasar";7oo
 import "@quasar/extras/material-icons/material-icons.css";
 import "quasar/src/css/index.sass";
 
