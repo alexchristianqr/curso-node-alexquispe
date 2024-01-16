@@ -43,9 +43,15 @@ class AuthService {
       },
     );
 
-    return {
+    const userAuthenticate = {
+      fullname: user.fullname,
+      status: user.status,
       access_token: access_token,
       expires_at: expires_at,
+    };
+
+    return {
+      user: userAuthenticate,
     };
   }
 }
