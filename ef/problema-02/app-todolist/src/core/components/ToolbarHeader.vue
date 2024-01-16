@@ -31,7 +31,7 @@ const { userAuthenticate, loggedIn } = storeToRefs(useAuthStore());
             <q-avatar icon="edit" color="primary" text-color="white" />
           </q-item-section>
           <q-item-section>
-            <q-item-label style="width: 150px">Actualizar</q-item-label>
+            <q-item-label style="width: 150px">Actualizar usuario</q-item-label>
           </q-item-section>
         </q-item>
         <q-item clickable v-close-popup tabindex="0">
@@ -39,7 +39,7 @@ const { userAuthenticate, loggedIn } = storeToRefs(useAuthStore());
             <q-avatar icon="delete" color="primary" text-color="white" />
           </q-item-section>
           <q-item-section>
-            <q-item-label style="width: 150px">Eliminar</q-item-label>
+            <q-item-label style="width: 150px">Eliminar usuario</q-item-label>
           </q-item-section>
         </q-item>
       </q-list>
