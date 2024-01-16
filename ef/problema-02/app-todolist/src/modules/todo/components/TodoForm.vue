@@ -39,7 +39,6 @@ const onSubmit = async (payload: any) => {
   await loadingSubmit(false);
 };
 const onRegister = async (payload: any) => {
-  loading.value = true;
   await createTodo(payload);
   onReset();
 };

@@ -1,7 +1,44 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { ref } from "vue";
+import { PayloadLoginForm } from "../interfaces";
+import { useAuthStore } from "../store";
+
+const { login } = useAuthStore();
+
+const usernameRef = ref();
+const passwordRef = ref();
+const loading = ref(false);
+const isPwd = ref(true);
+
+const payloadForm = ref<PayloadLoginForm>({ username: "acqrdeveloper@gmail.com", password: "admin123" });
+
+const loadingSubmit = async (stateLoading: boolean) => {
+  return (loading.value = stateLoading);
+};
+const onSubmit = async (payload: any) => {
+  await loadingSubmit(true);
+  await onLogin(payload);
+  await loadingSubmit(false);
+};
+const onLogin = async (payload: any) => {
+  await login(payload);
+  return payload;
+};
+</script>
 
 <template>
-  <div>Login Form</div>
+  <h4>Login</h4>
+  <q-form class="q-gutter-md" @submit.prevent.stop="onSubmit(payloadForm)">
+    <q-input :ref="usernameRef" outlined v-model="payloadForm.username" label="Usuario" :rules="[(val) => !!val || 'Campo obligatorio']" />
+    <q-input :type="isPwd ? 'password' : 'text'" :ref="passwordRef" outlined v-model="payloadForm.password" label="Contraseña" :rules="[(val) => !!val || 'Campo obligatorio']">
+      <template v-slot:append>
+        <q-icon :name="isPwd ? 'visibility_off' : 'visibility'" class="cursor-pointer" @click="isPwd = !isPwd" />
+      </template>
+    </q-input>
+    <q-btn type="submit" color="primary" label="Iniciar Sesion" :loading="loading" :disable="loading">
+      <template v-slot:loading><q-spinner /></template>
+    </q-btn>
+  </q-form>
 </template>
 
 <style scoped></style>

@@ -31,6 +31,14 @@ class HttpAdapterService {
     axios.defaults.headers.common = {};
   }
 
+  addHeaderAuthorization(access_token: string) {
+    axios.defaults.headers.common["Authorization"] = `Bearer ${access_token}`;
+  }
+
+  addHeader(key: string, value: string) {
+    axios.defaults.headers.common[key] = value;
+  }
+
   async get(url: string, config?: CI_AxiosRequestConfig): Promise<any> {
     try {
       return this.getHTTPClient(config).get(url, this.config);
