@@ -23,20 +23,16 @@ class HttpAdapterService {
   }
 
   getHTTPClient(config?: CI_AxiosRequestConfig): AxiosStatic {
-    if (config?.isPublic) this.removeHeader();
+    if (config?.isPublic) this.removeHeaders();
     return axios;
   }
 
-  removeHeader() {
+  removeHeaders() {
     axios.defaults.headers.common = {};
   }
 
   addHeaderAuthorization(access_token: string) {
     axios.defaults.headers.common["Authorization"] = `Bearer ${access_token}`;
-  }
-
-  addHeader(key: string, value: string) {
-    axios.defaults.headers.common[key] = value;
   }
 
   async get(url: string, config?: CI_AxiosRequestConfig): Promise<any> {
@@ -81,47 +77,6 @@ class HttpAdapterService {
     try {
       this.config = { data };
       return this.getHTTPClient(config).delete(url, this.config);
-    } catch (error) {
-      return this.throwError(error);
-    }
-  }
-
-  // --
-
-  async getBlob(url: string, config?: CI_AxiosRequestConfig) {
-    try {
-      this.config = {
-        responseType: "blob",
-      };
-      return this.getHTTPClient(config).get(url, this.config);
-    } catch (error) {
-      return this.throwError(error);
-    }
-  }
-
-  async upload(url: string, data?: Record<string, unknown>, config?: CI_AxiosRequestConfig) {
-    try {
-      this.config = {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          ...config?.headers,
-        },
-      };
-      return this.getHTTPClient(config).postForm(url, data, this.config);
-    } catch (error) {
-      return this.throwError(error);
-    }
-  }
-
-  async uploadPut(url: string, data?: Record<string, unknown>, config?: CI_AxiosRequestConfig) {
-    try {
-      this.config = {
-        headers: {
-          ...config?.headers,
-          "Content-Type": "multipart/form-data",
-        },
-      };
-      return this.getHTTPClient(config).put(url, data, this.config);
     } catch (error) {
       return this.throwError(error);
     }

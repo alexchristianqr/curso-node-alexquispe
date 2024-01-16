@@ -12,9 +12,7 @@ class TodoService {
   }
   async createTodo(payload: Todo) {
     try {
-      const data = {
-        payload,
-      };
+      const data = { payload };
       const response = await httpAdapterService.post("/todo", data);
       return response.data;
     } catch (error) {
@@ -23,9 +21,7 @@ class TodoService {
   }
   async updateTodo(payload: Todo) {
     try {
-      const data = {
-        payload,
-      };
+      const data = { payload };
       const response = await httpAdapterService.put(`/todo/${payload._id}`, data);
       return response.data;
     } catch (error) {
@@ -34,9 +30,7 @@ class TodoService {
   }
   async deleteTodo(payload: Todo) {
     try {
-      const data = {
-        payload,
-      };
+      const data = { payload };
       const response = await httpAdapterService.delete(`/todo/${payload._id}`, data);
       return response.data;
     } catch (error) {

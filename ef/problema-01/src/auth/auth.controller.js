@@ -11,6 +11,15 @@ class AuthController {
       return errorHandler({ req, res, error });
     }
   }
+  async logout(req, res) {
+    try {
+      const data = req.body;
+      const result = await authService.signOut(data);
+      return responseHandler({ req, res }, result);
+    } catch (error) {
+      return errorHandler({ req, res, error });
+    }
+  }
 }
 
 export const authController = new AuthController();

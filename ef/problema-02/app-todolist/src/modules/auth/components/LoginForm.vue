@@ -3,7 +3,7 @@ import { ref } from "vue";
 import { PayloadLoginForm } from "../interfaces";
 import { useAuthStore } from "../store";
 
-const { login } = useAuthStore();
+const { signIn } = useAuthStore();
 
 const usernameRef = ref();
 const passwordRef = ref();
@@ -17,12 +17,11 @@ const loadingSubmit = async (stateLoading: boolean) => {
 };
 const onSubmit = async (payload: any) => {
   await loadingSubmit(true);
-  await onLogin(payload);
+  await onSignIn(payload);
   await loadingSubmit(false);
 };
-const onLogin = async (payload: any) => {
-  await login(payload);
-  return payload;
+const onSignIn = async (payload: any) => {
+  await signIn(payload);
 };
 </script>
 

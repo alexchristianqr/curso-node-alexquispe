@@ -1,6 +1,5 @@
 import { defineStore } from "pinia";
-import { Todo } from "../../todo/interfaces";
-import { authService } from "../services/auth.service";
+import { authService } from "../services/auth.service.ts";
 import { qalertNotify } from "../../../core/utils";
 import { User } from "../interfaces";
 import { httpAdapterService } from "../../../core/services";
@@ -19,7 +18,7 @@ export const useAuthStore = defineStore("auth", {
     loggedIn: (state) => state.auth.loggedIn,
   },
   actions: {
-    async login(payload: Todo) {
+    async signIn(payload: any) {
       const { result } = await authService.signIn(payload);
       this.auth.user = result.user;
       this.auth.accessToken = result.user.access_token;
@@ -29,6 +28,24 @@ export const useAuthStore = defineStore("auth", {
 
       qalertNotify({
         message: "Usted ha iniciado sesión con éxito",
+      });
+    },
+    async signOut() {
+      if (this.auth.user._id) {
+        const payload = {
+          userId: this.auth.user._id,
+        };
+        await authService.signOut(payload);
+      }
+      this.auth.user = { _id: "", fullname: null, access_token: null, expires_at: null };
+      this.auth.accessToken = null;
+      this.auth.loggedIn = false;
+
+      await httpAdapterService.removeHeaders();
+
+      qalertNotify({
+        color: "red",
+        message: "Ha cerrado su sesión con éxito",
       });
     },
   },

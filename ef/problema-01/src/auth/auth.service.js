@@ -6,9 +6,10 @@ class AuthService {
   async signIn(data) {
     const { payload } = data;
     const { username, password } = payload;
+
+    // Obtener usuario
     const user = await User.findOne({ username: username });
 
-    // Validar usuario
     if (!user) {
       throw {
         message: "El email o contraseña son incorrectos",
@@ -44,6 +45,7 @@ class AuthService {
     );
 
     const userAuthenticate = {
+      _id: userId,
       fullname: user.fullname,
       status: user.status,
       access_token: access_token,
@@ -53,6 +55,29 @@ class AuthService {
     return {
       user: userAuthenticate,
     };
+  }
+  async signOut(data) {
+    const { payload } = data;
+
+    // Buscar usuario
+    const user = await User.findOne({
+      _id: payload.userId,
+    });
+
+    if (!user) throw { message: "user not found", status: httpStatusCodes.FORBIDDEN };
+
+    // Actualizar usuario
+    await User.updateOne(
+      {
+        _id: user._id,
+      },
+      {
+        access_token: null,
+        expires_at: null,
+        refresh_at: new Date(),
+        revoked: true,
+      },
+    );
   }
 }
 

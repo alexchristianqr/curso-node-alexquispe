@@ -45,15 +45,9 @@ const removeForm = (data: Todo) => {
 
 <template>
   <h4>Formulario</h4>
-
-  <TodoForm :configForm="configForm" :payloadForm="payloadForm" />
+  <TodoForm :config-form="configForm" :payload-form="payloadForm" />
 
   <h4>Listado</h4>
-
-  <!--  <div class="q-px-md q-py-md bg-dark text-white q-my-md">-->
-  <!--    <pre>{{ todos }}</pre>-->
-  <!--  </div>-->
-
   <div>
     <q-table :columns="columns" :rows="rows" bordered flat row-key="name">
       <template v-slot:body-cell-status="props">
