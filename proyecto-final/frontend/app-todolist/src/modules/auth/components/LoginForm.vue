@@ -34,9 +34,19 @@ const onSignIn = async (payload: any) => {
         <q-icon :name="isPwd ? 'visibility_off' : 'visibility'" class="cursor-pointer" @click="isPwd = !isPwd" />
       </template>
     </q-input>
-    <q-btn type="submit" color="primary" label="Iniciar Sesion" :loading="loading" :disable="loading">
-      <template v-slot:loading><q-spinner /></template>
-    </q-btn>
+    <div class="row">
+      <div class="col">
+        <div class="text-right">
+          <a href="#">Recuperar contraseña</a>
+        </div>
+      </div>
+    </div>
+    <div class="q-gutter-md text-center">
+      <q-btn type="submit" color="primary" label="Iniciar Sesion" :loading="loading" :disable="loading">
+        <template v-slot:loading><q-spinner /></template>
+      </q-btn>
+      <div>Si no está registrado, haga clic <a href="#">aquí</a></div>
+    </div>
   </q-form>
 </template>
 
