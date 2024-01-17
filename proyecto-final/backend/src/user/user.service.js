@@ -26,7 +26,7 @@ class UserService {
   async updateById(id, payload) {
     return User.updateOne({ _id: id }, payload);
   }
-  async updateQuery(payload) {
+  async updateByQuery(payload) {
     const { query, data } = payload;
     return User.updateOne(query, data);
   }

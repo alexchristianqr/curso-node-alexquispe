@@ -1,6 +1,6 @@
-import { User } from "../../user/user.schema.js";
 import { errorHandler } from "../utils/index.js";
 import { httpStatusCodes } from "../enums/index.js";
+import { userService } from "../../user/user.service.js";
 
 export async function validateBearerToken(req, res, next) {
   try {
@@ -14,23 +14,22 @@ export async function validateBearerToken(req, res, next) {
     if (!accessToken) return res.status(httpStatusCodes.UNAUTHORIZED).json({ message: "access unauthorized" });
 
     // Set query
-    const queryOauthAccessToken = {
+    const queryUserOauth = {
       access_token: accessToken,
     };
     if (!envDevelopment) {
-      queryOauthAccessToken.revoked = false;
+      queryUserOauth.revoked = false;
     }
 
     // Encontrar token de acceso
-    const oauthAccessToken = await User.findOne(queryOauthAccessToken);
-    if (!oauthAccessToken) return res.status(httpStatusCodes.UNAUTHORIZED).json({ message: "access unauthorized" });
+    const userOauth = await userService.getByQuery({ query: queryUserOauth });
+    if (!userOauth) return res.status(httpStatusCodes.UNAUTHORIZED).json({ message: "access unauthorized" });
 
-    const userId = oauthAccessToken._id;
+    const userId = userOauth._id;
+    const validateExpAccessToken = userOauth.expires_at >= new Date();
 
     // Validar fecha de expiración de token de acceso / No validará si está en modo desarrollo
-    const validateExpAccessToken = oauthAccessToken.expires_at >= new Date();
     if (!validateExpAccessToken && !envDevelopment) {
-      // Set user updated
       const userUpdated = {
         access_token: null, // Token de acceso
         refresh_token: null, // Token de actualización
@@ -38,15 +37,16 @@ export async function validateBearerToken(req, res, next) {
         revoked: true, // Token revocado
         refresh_at: new Date(), // Fecha token actualizado
       };
-      await User.updateOne({ _id: userId }, userUpdated);
+      await userService.updateById(userId, userUpdated);
       return res.status(httpStatusCodes.UNAUTHORIZED).json({ message: "access unauthorized" });
     }
 
     // Buscar usuario autenticado
-    const user = await User.findOne({
+    const queryUser = {
       _id: userId, // ObjectId()
       status: "active",
-    });
+    };
+    const user = await userService.getByQuery({ query: queryUser });
 
     // Validar usuario
     if (!user) {
