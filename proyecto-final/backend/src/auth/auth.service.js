@@ -1,10 +1,18 @@
 import { compareHashedPassword, signJwtToken } from "../core/utils/index.js";
 import { httpStatusCodes } from "../core/enums/index.js";
 import { userService } from "../user/user.service.js";
+import { mailService } from "../core/services/index.js";
+import { checkInputPasswords } from "./auth.util.js";
 
 class AuthService {
   async signUp(payload) {
+    if (!checkInputPasswords(payload)) throw { message: "Las contraseñas ingresadas no son iguales", status: httpStatusCodes.BAD_REQUEST };
+
     const user = await userService.create(payload);
+
+    // Enviar email
+    await mailService.sendMailSingle({ subject: "Nuevo registro", to: payload.username, message: "Muchas gracias por registrarte al sistema." });
+
     return user;
   }
   async signIn(payload) {
@@ -41,6 +49,9 @@ class AuthService {
       revoked: false,
     });
 
+    // Enviar email
+    await mailService.sendMailSingle({ subject: "Alerta de seguridad", to: username, message: "Has iniciado sesión recientemente." });
+
     const userAuthenticate = {
       _id: userId,
       fullname: user.fullname,
@@ -52,12 +63,10 @@ class AuthService {
       user: userAuthenticate,
     };
   }
-  async signOut(data) {
-    const { payload } = data;
-    let userId;
+  async signOut(payload) {
+    const { userId = null } = payload;
 
     // Buscar usuario
-    userId = payload.userId;
     const user = await userService.getById(userId);
     if (!user) throw { message: "user not found", status: httpStatusCodes.FORBIDDEN };
 
@@ -68,7 +77,11 @@ class AuthService {
       refresh_at: new Date(),
       revoked: true,
     });
+
+    return true;
   }
+  async forgotPassword() {}
+  async resetPassword() {}
 }
 
 export const authService = new AuthService();
