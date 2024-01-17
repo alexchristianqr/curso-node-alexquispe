@@ -21,8 +21,8 @@ class TodoController {
   }
   async createTodo(req, res) {
     try {
-      const data = req.body;
-      const result = await todoService.create(data);
+      const { payload } = req.body;
+      const result = await todoService.create(payload);
       return responseHandler({ req, res }, result);
     } catch (error) {
       return errorHandler({ req, res, error });
@@ -31,8 +31,8 @@ class TodoController {
   async updateTodo(req, res) {
     try {
       const { id } = req.params;
-      const data = req.body;
-      const result = await todoService.update(id, data);
+      const { payload } = req.body;
+      const result = await todoService.update(id, payload);
       return responseHandler({ req, res }, result);
     } catch (error) {
       return errorHandler({ req, res, error });
@@ -41,8 +41,8 @@ class TodoController {
   async updateFieldTodo(req, res) {
     try {
       const { id } = req.params;
-      const data = req.body;
-      const result = await todoService.updateField(id, data);
+      const { payload } = req.body;
+      const result = await todoService.updateField(id, payload);
       return responseHandler({ req, res }, result);
     } catch (error) {
       return errorHandler({ req, res, error });

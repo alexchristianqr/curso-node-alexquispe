@@ -3,12 +3,11 @@ import { httpStatusCodes } from "../core/enums/index.js";
 import { userService } from "../user/user.service.js";
 
 class AuthService {
-  async signUp(data) {
-    const user = await userService.create(data);
+  async signUp(payload) {
+    const user = await userService.create(payload);
     return user;
   }
-  async signIn(data) {
-    const { payload } = data;
+  async signIn(payload) {
     const { username, password } = payload;
 
     // Obtener usuario
@@ -36,12 +35,10 @@ class AuthService {
 
     // Actualizar access token y refresh token de usuario autenticado
     await userService.updateById(userId, {
-      payload: {
-        access_token: access_token,
-        expires_at: new Date(expires_at),
-        refresh_at: new Date(),
-        revoked: false,
-      },
+      access_token: access_token,
+      expires_at: new Date(expires_at),
+      refresh_at: new Date(),
+      revoked: false,
     });
 
     const userAuthenticate = {
@@ -66,12 +63,10 @@ class AuthService {
 
     // Actualizar usuario
     await userService.updateById(userId, {
-      payload: {
-        access_token: null,
-        expires_at: null,
-        refresh_at: new Date(),
-        revoked: true,
-      },
+      access_token: null,
+      expires_at: null,
+      refresh_at: new Date(),
+      revoked: true,
     });
   }
 }

@@ -8,13 +8,11 @@ class UserService {
   async getById(id) {
     return User.findOne({ _id: id });
   }
-  async getByQuery(data) {
-    const { query } = data;
+  async getByQuery(payload) {
+    const { query } = payload;
     return User.findOne(query);
   }
-  async create(data) {
-    const { payload } = data;
-
+  async create(payload) {
     payload.password = hashedPassword(payload.password);
     payload.revoked = false;
     const user = payload;
@@ -25,13 +23,12 @@ class UserService {
 
     return User.create(payload);
   }
-  async updateById(id, data) {
-    const { payload } = data;
+  async updateById(id, payload) {
     return User.updateOne({ _id: id }, payload);
   }
-  async updateQuery(data) {
-    const { query, payload } = data;
-    return User.updateOne(query, payload);
+  async updateQuery(payload) {
+    const { query, data } = payload;
+    return User.updateOne(query, data);
   }
 }
 
