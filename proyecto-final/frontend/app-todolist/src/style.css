@@ -3,7 +3,7 @@ body > .mypage {
 }
 
 .mypage {
-  max-width: 800px;
+  max-width: 600px;
   margin: 0 auto;
-  padding: 2rem;
+  /*padding: 0.5rem;*/
 }

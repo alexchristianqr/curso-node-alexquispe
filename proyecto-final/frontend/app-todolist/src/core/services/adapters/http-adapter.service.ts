@@ -8,6 +8,25 @@ interface CI_AxiosRequestConfig extends AxiosRequestConfig {
   isBlob?: boolean;
 }
 
+// Add a response interceptor
+axios.interceptors.response.use(
+  function (response) {
+    if ((response.code = "ERR_BAD_RESPONSE")) {
+    }
+    // Any status code that lie within the range of 2xx cause this function to trigger
+    // Do something with response data
+    console.log("alex", { response });
+    return response;
+  },
+  function (error) {
+    // Any status codes that falls outside the range of 2xx cause this function to trigger
+    // Do something with response error
+    console.log("error aqui", error);
+    console.error(error);
+    // return Promise.reject(error);
+  },
+);
+
 class HttpAdapterService {
   private config: AxiosRequestConfig = {};
 
