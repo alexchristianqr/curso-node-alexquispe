@@ -8,6 +8,10 @@ class UserService {
   async getById(id) {
     return User.findOne({ _id: id });
   }
+  async getByQuery(data) {
+    const { query } = data;
+    return User.findOne(query);
+  }
   async create(data) {
     const { payload } = data;
 
@@ -20,6 +24,14 @@ class UserService {
     payload.expires_at = expires_at;
 
     return User.create(payload);
+  }
+  async updateById(id, data) {
+    const { payload } = data;
+    return User.updateOne({ _id: id }, payload);
+  }
+  async updateQuery(data) {
+    const { query, payload } = data;
+    return User.updateOne(query, payload);
   }
 }
 

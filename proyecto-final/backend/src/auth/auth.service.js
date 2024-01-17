@@ -1,6 +1,6 @@
-import { User } from "../user/user.schema.js";
 import { compareHashedPassword, signJwtToken } from "../core/utils/index.js";
 import { httpStatusCodes } from "../core/enums/index.js";
+import { userService } from "../user/user.service.js";
 
 class AuthService {
   async signIn(data) {
@@ -8,8 +8,7 @@ class AuthService {
     const { username, password } = payload;
 
     // Obtener usuario
-    const user = await User.findOne({ username: username });
-
+    const user = await userService.getByQuery({ query: { username: username } });
     if (!user) {
       throw {
         message: "El email o contraseña son incorrectos",
@@ -32,17 +31,14 @@ class AuthService {
     const { access_token, expires_at } = await signJwtToken({ user });
 
     // Actualizar access token y refresh token de usuario autenticado
-    await User.updateOne(
-      {
-        _id: userId,
-      },
-      {
+    await userService.updateById(userId, {
+      payload: {
         access_token: access_token,
         expires_at: new Date(expires_at),
         refresh_at: new Date(),
         revoked: false,
       },
-    );
+    });
 
     const userAuthenticate = {
       _id: userId,
@@ -51,33 +47,28 @@ class AuthService {
       access_token: access_token,
       expires_at: expires_at,
     };
-
     return {
       user: userAuthenticate,
     };
   }
   async signOut(data) {
     const { payload } = data;
+    let userId;
 
     // Buscar usuario
-    const user = await User.findOne({
-      _id: payload.userId,
-    });
-
+    userId = payload.userId;
+    const user = await userService.getById(userId);
     if (!user) throw { message: "user not found", status: httpStatusCodes.FORBIDDEN };
 
     // Actualizar usuario
-    await User.updateOne(
-      {
-        _id: user._id,
-      },
-      {
+    await userService.updateById(userId, {
+      payload: {
         access_token: null,
         expires_at: null,
         refresh_at: new Date(),
         revoked: true,
       },
-    );
+    });
   }
 }
 
