@@ -2,6 +2,15 @@ import { errorHandler, responseHandler } from "../core/utils/index.js";
 import { authService } from "./auth.service.js";
 
 class AuthController {
+  async signUp(req, res) {
+    try {
+      const data = req.body;
+      const result = await authService.signUp(data);
+      return responseHandler({ req, res }, result);
+    } catch (error) {
+      return errorHandler({ req, res, error });
+    }
+  }
   async signIn(req, res) {
     try {
       const data = req.body;

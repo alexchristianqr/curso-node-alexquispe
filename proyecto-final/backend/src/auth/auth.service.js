@@ -3,6 +3,10 @@ import { httpStatusCodes } from "../core/enums/index.js";
 import { userService } from "../user/user.service.js";
 
 class AuthService {
+  async signUp(data) {
+    const user = await userService.create(data);
+    return user;
+  }
   async signIn(data) {
     const { payload } = data;
     const { username, password } = payload;
