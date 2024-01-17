@@ -8,10 +8,11 @@ const { signIn } = useAuthStore();
 const fullnameRef = ref();
 const usernameRef = ref();
 const passwordRef = ref();
+const repeatPasswordRef = ref();
 const loading = ref(false);
 const isPwd = ref(true);
 
-const payloadForm = ref<ActionUserForm>({ fullname: null, username: null, password: null });
+const payloadForm = ref<ActionUserForm>({ fullname: null, username: null, password: null, repeat_password: null });
 
 const loadingSubmit = async (stateLoading: boolean) => {
   return (loading.value = stateLoading);
@@ -36,9 +37,17 @@ const onSignIn = async (payload: any) => {
         <q-icon :name="isPwd ? 'visibility_off' : 'visibility'" class="cursor-pointer" @click="isPwd = !isPwd" />
       </template>
     </q-input>
-    <q-btn type="submit" color="primary" label="Crear usuario" :loading="loading" :disable="loading">
-      <template v-slot:loading><q-spinner /></template>
-    </q-btn>
+    <q-input :type="isPwd ? 'password' : 'text'" :ref="repeatPasswordRef" outlined v-model="payloadForm.repeat_password" label="Repetir contraseña" :rules="[(val) => !!val || 'Campo obligatorio']">
+      <template v-slot:append>
+        <q-icon :name="isPwd ? 'visibility_off' : 'visibility'" class="cursor-pointer" @click="isPwd = !isPwd" />
+      </template>
+    </q-input>
+    <div class="q-gutter-md text-center">
+      <q-btn type="submit" color="primary" label="Crear usuario" :loading="loading" :disable="loading">
+        <template v-slot:loading><q-spinner /></template>
+      </q-btn>
+      <div>Si estoy registrado, haga clic para <a href="/login">iniciar sesión</a></div>
+    </div>
   </q-form>
 </template>
 

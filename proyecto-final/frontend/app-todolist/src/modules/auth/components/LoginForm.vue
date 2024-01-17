@@ -2,8 +2,10 @@
 import { ref } from "vue";
 import { ActionSignIn } from "../interfaces";
 import { useAuthStore } from "../store";
+import { useRouter } from "vue-router";
 
 const { signIn } = useAuthStore();
+const router = useRouter();
 
 const usernameRef = ref();
 const passwordRef = ref();
@@ -22,6 +24,7 @@ const onSubmit = async (payload: any) => {
 };
 const onSignIn = async (payload: any) => {
   await signIn(payload);
+  await router.push({ name: "home" });
 };
 </script>
 
@@ -37,7 +40,7 @@ const onSignIn = async (payload: any) => {
     <div class="row">
       <div class="col">
         <div class="text-right">
-          <a href="#">Recuperar contraseña</a>
+          <a href="/forgot">Recuperar contraseña</a>
         </div>
       </div>
     </div>
@@ -45,7 +48,7 @@ const onSignIn = async (payload: any) => {
       <q-btn type="submit" color="primary" label="Iniciar Sesion" :loading="loading" :disable="loading">
         <template v-slot:loading><q-spinner /></template>
       </q-btn>
-      <div>Si no está registrado, haga clic <a href="#">aquí</a></div>
+      <div>Si no está registrado, haga clic <a href="/register">aquí</a></div>
     </div>
   </q-form>
 </template>

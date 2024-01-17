@@ -11,6 +11,7 @@ export interface ActionUserForm {
   fullname: string | null;
   username: string | null;
   password: string | null;
+  repeat_password: string | null;
   created_at?: Date | null;
   updated_at?: Date | null;
 }

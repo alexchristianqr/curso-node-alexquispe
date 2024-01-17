@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "../../modules/auth/store";
+import { useRouter } from "vue-router";
 
 const { userAuthenticate, loggedIn } = storeToRefs(useAuthStore());
 const { signOut } = useAuthStore();
+const router = useRouter();
 
 const onSignOut = async () => {
   await signOut();
+  await router.push({ name: "login" });
 };
 </script>
 
