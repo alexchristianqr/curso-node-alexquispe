@@ -23,6 +23,7 @@ export const useAuthStore = defineStore("auth", {
     async signUp(payload: ActionSignUp) {
       const { error } = await authService.signUp(payload);
       if (error) {
+        qalertNotify({ color: "red", message: error });
         return { success: false };
       }
 
@@ -37,10 +38,7 @@ export const useAuthStore = defineStore("auth", {
     async signIn(payload: ActionSignIn) {
       const { result, error } = await authService.signIn(payload);
       if (error) {
-        qalertNotify({
-          color: "red",
-          message: error,
-        });
+        qalertNotify({ color: "red", message: error });
         return { success: false };
       }
 

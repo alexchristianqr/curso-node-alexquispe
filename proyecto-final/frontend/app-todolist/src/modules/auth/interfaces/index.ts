@@ -15,7 +15,6 @@ export interface ActionForgotPassword {
 }
 export interface ActionResetPassword {
   token: string | null;
-  // username: string | null;
   password: string | null;
   repeat_password: string | null;
 }
