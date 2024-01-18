@@ -9,7 +9,7 @@ export async function validateBearerToken(req, res, next) {
 
     // Set header
     const headerAuth = req.header("Authorization");
-    if (!headerAuth) return res.status(httpStatusCodes.INTERNAL_SERVER_ERROR).json({ message: "header authorization not exists" });
+    if (!headerAuth) return res.status(httpStatusCodes.UNAUTHORIZED).json({ message: "header authorization not exists" });
     const accessToken = headerAuth.replace("Bearer ", "");
     if (!accessToken) return res.status(httpStatusCodes.UNAUTHORIZED).json({ message: "access unauthorized" });
 
@@ -54,7 +54,7 @@ export async function validateBearerToken(req, res, next) {
     }
 
     // Set
-    req.user = user;
+    req.userAuthenticate = user;
 
     // Response
     return next();

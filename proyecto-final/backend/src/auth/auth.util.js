@@ -1,4 +1,4 @@
 export function checkInputPasswords(payload) {
-  const { password, repetPassword } = payload;
-  return password === repetPassword;
+  const { password, repeat_password } = payload;
+  return password === repeat_password;
 }

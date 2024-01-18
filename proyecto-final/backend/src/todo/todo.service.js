@@ -1,8 +1,9 @@
 import { Todo } from "./todo.schema.js";
 
 class TodoService {
-  async getAll() {
-    return Todo.find();
+  async getAll(payload) {
+    const userId = payload.user._id;
+    return Todo.find({ user_id: userId });
   }
   async getById(id) {
     return Todo.findOne({ _id: id });

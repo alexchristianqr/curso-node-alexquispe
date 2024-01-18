@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { useAuthStore } from "../../auth/store";
 import { ref } from "vue";
-import { ActionUserForm } from "../interfaces";
+import { ActionSignUp } from "../../auth/interfaces";
 
-const { signIn } = useAuthStore();
+const { signUp } = useAuthStore();
 
 const fullnameRef = ref();
 const usernameRef = ref();
@@ -12,18 +12,21 @@ const repeatPasswordRef = ref();
 const loading = ref(false);
 const isPwd = ref(true);
 
-const payloadForm = ref<ActionUserForm>({ fullname: null, username: null, password: null, repeat_password: null });
+const payloadForm = ref<ActionSignUp>({ fullname: null, username: null, password: null, repeat_password: null });
 
 const loadingSubmit = async (stateLoading: boolean) => {
   return (loading.value = stateLoading);
 };
 const onSubmit = async (payload: any) => {
   await loadingSubmit(true);
-  await onSignIn(payload);
+  await onSignUp(payload);
   await loadingSubmit(false);
 };
-const onSignIn = async (payload: any) => {
-  await signIn(payload);
+const onSignUp = async (payload: any) => {
+  const { success = null } = await signUp(payload);
+  if (!success) {
+    await loadingSubmit(false);
+  }
 };
 </script>
 

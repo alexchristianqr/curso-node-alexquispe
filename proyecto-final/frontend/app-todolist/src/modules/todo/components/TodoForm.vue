@@ -2,8 +2,10 @@
 import { computed, ref } from "vue";
 import { ConfigForm, Todo } from "../interfaces";
 import { useTodoStore } from "../store";
+import { useAuthStore } from "../../auth/store";
 
 const { createTodo, updateTodo, deleteTodo } = useTodoStore();
+const { userAuthenticate } = useAuthStore();
 
 const props = defineProps<{
   configForm: ConfigForm;
@@ -39,6 +41,7 @@ const onSubmit = async (payload: any) => {
   await loadingSubmit(false);
 };
 const onRegister = async (payload: any) => {
+  payload.user_id = userAuthenticate._id;
   await createTodo(payload);
   onReset();
 };

@@ -23,7 +23,10 @@ const onSubmit = async (payload: any) => {
   await loadingSubmit(false);
 };
 const onSignIn = async (payload: any) => {
-  await signIn(payload);
+  const { success = null } = await signIn(payload);
+  if (!success) {
+    await loadingSubmit(false);
+  }
   await router.push({ name: "home" });
 };
 </script>

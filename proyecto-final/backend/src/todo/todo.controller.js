@@ -4,7 +4,9 @@ import { responseHandler, errorHandler } from "../core/utils/index.js";
 class TodoController {
   async getTodos(req, res) {
     try {
-      const result = await todoService.getAll();
+      const payload = {};
+      payload.user = req.userAuthenticate;
+      const result = await todoService.getAll(payload);
       return responseHandler({ req, res }, result);
     } catch (error) {
       return errorHandler({ req, res, error });

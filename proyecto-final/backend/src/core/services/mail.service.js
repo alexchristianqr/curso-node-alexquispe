@@ -20,7 +20,7 @@ const transporter = createTransport({
     user: username,
     pass: password,
   },
-  debug: true,
+  debug: false,
   logger: true,
   tls: {
     rejectUnauthorized: false,

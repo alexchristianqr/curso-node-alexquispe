@@ -1,5 +1,25 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosStatic, isAxiosError } from "axios";
 import { ErrorResponseService } from "../responses";
+import { router } from "../../routes";
+
+// Interceptar solicitudes
+axios.interceptors.response.use(
+  (response) => {
+    console.log("[axios.interceptors]", { response });
+    return response;
+  },
+  async (error) => {
+    console.error("[axios.interceptors]", { error });
+    const { status } = error.response;
+    if (status === 401) {
+      await router.push({ name: "login" });
+      return error.response;
+    } else {
+      return error.response;
+    }
+  },
+);
+
 const endpoint = import.meta.env.VITE_ENDPOINT_API;
 
 interface CI_AxiosRequestConfig extends AxiosRequestConfig {
@@ -7,25 +27,6 @@ interface CI_AxiosRequestConfig extends AxiosRequestConfig {
   isPublic?: boolean;
   isBlob?: boolean;
 }
-
-// Add a response interceptor
-axios.interceptors.response.use(
-  function (response) {
-    if ((response.code = "ERR_BAD_RESPONSE")) {
-    }
-    // Any status code that lie within the range of 2xx cause this function to trigger
-    // Do something with response data
-    console.log("alex", { response });
-    return response;
-  },
-  function (error) {
-    // Any status codes that falls outside the range of 2xx cause this function to trigger
-    // Do something with response error
-    console.log("error aqui", error);
-    console.error(error);
-    // return Promise.reject(error);
-  },
-);
 
 class HttpAdapterService {
   private config: AxiosRequestConfig = {};

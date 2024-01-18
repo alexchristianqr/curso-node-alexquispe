@@ -2,6 +2,7 @@ type StatusTodo = "complete" | "in_progress" | "todo";
 
 export interface Todo {
   _id?: string | null;
+  user_id?: string | null;
   description?: string | null;
   status?: StatusTodo | null;
   created_at?: Date | null;

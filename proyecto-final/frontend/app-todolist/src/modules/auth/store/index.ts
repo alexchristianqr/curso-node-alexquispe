@@ -1,7 +1,8 @@
 import { defineStore } from "pinia";
 import { authService } from "../services/auth.service.ts";
 import { qalertNotify } from "../../../core/utils";
-import { ActionSignIn, ActionSignOut, User } from "../interfaces";
+import { ActionSignIn, ActionSignOut, ActionSignUp, User } from "../interfaces";
+import { router } from "../../../core/routes";
 import { httpAdapterService } from "../../../core/services";
 
 export const useAuthStore = defineStore("auth", {
@@ -18,8 +19,30 @@ export const useAuthStore = defineStore("auth", {
     loggedIn: (state) => state.auth.loggedIn,
   },
   actions: {
-    async signIn(payload: ActionSignIn) {
-      const { result } = await authService.signIn(payload);
+    async signUp(payload: ActionSignUp) {
+      const { error } = await authService.signUp(payload);
+      if (error) {
+        return { success: false };
+      }
+
+      await router.replace({ name: "login" });
+
+      qalertNotify({
+        message: "Usted se ha registrado con éxito. Inicie sesión con sus credenciales",
+      });
+
+      return { success: true };
+    },
+    async signIn(payload: ActionSignIn): Promise<any> {
+      const { result, error } = await authService.signIn(payload);
+      if (error) {
+        qalertNotify({
+          color: "red",
+          message: error,
+        });
+        return { success: false };
+      }
+
       this.auth.user = result.user;
       this.auth.accessToken = result.user.access_token;
       this.auth.loggedIn = true;
@@ -29,6 +52,8 @@ export const useAuthStore = defineStore("auth", {
       qalertNotify({
         message: "Usted ha iniciado sesión con éxito",
       });
+
+      return { success: true };
     },
     async signOut() {
       if (this.auth.user._id) {
@@ -47,6 +72,8 @@ export const useAuthStore = defineStore("auth", {
         color: "red",
         message: "Ha cerrado su sesión con éxito",
       });
+
+      return { success: true };
     },
   },
 });

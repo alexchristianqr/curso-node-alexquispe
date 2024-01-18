@@ -1,7 +1,16 @@
 import { httpAdapterService } from "../../../core/services";
-import { ActionSignIn, ActionSignOut } from "../interfaces";
+import { ActionSignIn, ActionSignOut, ActionSignUp } from "../interfaces";
 
 class AuthService {
+  async signUp(payload: ActionSignUp) {
+    try {
+      const data = { payload };
+      const response = await httpAdapterService.post("/auth/register", data);
+      return response.data;
+    } catch (error) {
+      return error;
+    }
+  }
   async signIn(payload: ActionSignIn) {
     try {
       const data = { payload };
@@ -14,8 +23,8 @@ class AuthService {
   async signOut(payload: ActionSignOut) {
     try {
       const data = { payload };
-      await httpAdapterService.post("/auth/logout", data);
-      return;
+      const response = await httpAdapterService.post("/auth/logout", data);
+      return response.data;
     } catch (error) {
       return error;
     }

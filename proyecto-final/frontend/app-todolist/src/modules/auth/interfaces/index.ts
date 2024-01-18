@@ -1,3 +1,10 @@
+export interface ActionSignUp {
+  fullname: string | null;
+  username: string | null;
+  password: string | null;
+  repeat_password: string | null;
+}
+
 export interface ActionSignIn {
   username: string | null;
   password: string | null;
