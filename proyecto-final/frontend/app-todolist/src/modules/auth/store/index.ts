@@ -1,9 +1,10 @@
 import { defineStore } from "pinia";
 import { authService } from "../services/auth.service.ts";
 import { qalertNotify } from "../../../core/utils";
-import { ActionSignIn, ActionSignOut, ActionSignUp, User } from "../interfaces";
+import { ActionSignIn, ActionSignOut, ActionSignUp } from "../interfaces";
 import { router } from "../../../core/routes";
 import { httpAdapterService } from "../../../core/services";
+import { User } from "../../user/interfaces";
 
 export const useAuthStore = defineStore("auth", {
   state: () => ({
@@ -60,9 +61,17 @@ export const useAuthStore = defineStore("auth", {
         const payload: ActionSignOut = {
           userId: this.auth.user._id,
         };
-        await authService.signOut(payload);
+        const { error } = await authService.signOut(payload);
+        if (error) {
+          qalertNotify({
+            color: "red",
+            message: error,
+          });
+          return { success: false };
+        }
       }
-      this.auth.user = { _id: "", fullname: null, access_token: null, expires_at: null, status: null };
+
+      this.auth.user = { _id: "", fullname: "", access_token: "", expires_at: "", status: "" };
       this.auth.accessToken = null;
       this.auth.loggedIn = false;
 
@@ -72,6 +81,8 @@ export const useAuthStore = defineStore("auth", {
         color: "red",
         message: "Ha cerrado su sesión con éxito",
       });
+
+      await router.replace({ name: "login" });
 
       return { success: true };
     },

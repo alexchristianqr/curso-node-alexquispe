@@ -1,15 +1,20 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "../../modules/auth/store";
-import { useRouter } from "vue-router";
+import { ref } from "vue";
 
 const { userAuthenticate, loggedIn } = storeToRefs(useAuthStore());
 const { signOut } = useAuthStore();
-const router = useRouter();
 
+const loading = ref(false);
+
+const loadingSubmit = async (stateLoading: boolean) => {
+  return (loading.value = stateLoading);
+};
 const onSignOut = async () => {
+  await loadingSubmit(true);
   await signOut();
-  await router.push({ name: "login" });
+  await loadingSubmit(false);
 };
 </script>
 
@@ -19,39 +24,42 @@ const onSignOut = async () => {
 
     <q-space />
 
-    <q-btn-dropdown flat :label="userAuthenticate.fullname" v-if="loggedIn">
-      <q-list>
-        <q-item-label header>Inicio de sesión</q-item-label>
-        <q-item clickable v-close-popup tabindex="0" @click="onSignOut">
-          <q-item-section avatar>
-            <q-avatar icon="logout" color="primary" text-color="white" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label style="width: 150px">Cerrar sesión</q-item-label>
-          </q-item-section>
-        </q-item>
+    <template v-if="loggedIn">
+      <q-btn-dropdown flat :label="userAuthenticate.fullname || '-'" :loading="loading" :disable="loading">
+        <q-list>
+          <q-item-label header>Inicio de sesión</q-item-label>
+          <q-item clickable v-close-popup tabindex="0" class="q-mb-sm" @click="onSignOut">
+            <q-item-section avatar>
+              <q-avatar icon="logout" color="primary" text-color="white" />
+            </q-item-section>
+            <q-item-section>
+              <q-item-label style="width: 150px">Cerrar sesión</q-item-label>
+            </q-item-section>
+          </q-item>
 
-        <q-separator inset spaced />
+          <!--          <q-separator inset spaced />-->
 
-        <q-item-label header>Información personal</q-item-label>
-        <q-item clickable v-close-popup tabindex="0">
-          <q-item-section avatar>
-            <q-avatar icon="edit" color="primary" text-color="white" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label style="width: 150px">Actualizar usuario</q-item-label>
-          </q-item-section>
-        </q-item>
-        <q-item clickable v-close-popup tabindex="0">
-          <q-item-section avatar>
-            <q-avatar icon="delete" color="primary" text-color="white" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label style="width: 150px">Eliminar usuario</q-item-label>
-          </q-item-section>
-        </q-item>
-      </q-list>
-    </q-btn-dropdown>
+          <!--          <q-item-label header>Información personal</q-item-label>-->
+          <!--          <q-item clickable v-close-popup tabindex="0">-->
+          <!--            <q-item-section avatar>-->
+          <!--              <q-avatar icon="edit" color="primary" text-color="white" />-->
+          <!--            </q-item-section>-->
+          <!--            <q-item-section>-->
+          <!--              <q-item-label style="width: 150px">Actualizar usuario</q-item-label>-->
+          <!--            </q-item-section>-->
+          <!--          </q-item>-->
+          <!--          <q-item clickable v-close-popup tabindex="0">-->
+          <!--            <q-item-section avatar>-->
+          <!--              <q-avatar icon="delete" color="primary" text-color="white" />-->
+          <!--            </q-item-section>-->
+          <!--            <q-item-section>-->
+          <!--              <q-item-label style="width: 150px">Eliminar usuario</q-item-label>-->
+          <!--            </q-item-section>-->
+          <!--          </q-item>-->
+        </q-list>
+        <template v-slot:loading><q-spinner /></template>
+      </q-btn-dropdown>
+    </template>
   </q-toolbar>
 </template>
 

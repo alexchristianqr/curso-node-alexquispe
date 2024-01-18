@@ -1,17 +1,17 @@
 export interface User {
   _id: string;
-  fullname: string | null;
-  access_token: string | null;
-  expires_at: string | null;
-  status: string | null;
+  fullname: string;
+  access_token: string;
+  expires_at: string;
+  status: string;
 }
 
 export interface ActionUserForm {
   _id?: string;
-  fullname: string | null;
-  username: string | null;
-  password: string | null;
-  repeat_password: string | null;
+  fullname: string;
+  username: string;
+  password: string;
+  repeat_password: string;
   created_at?: Date | null;
   updated_at?: Date | null;
 }
