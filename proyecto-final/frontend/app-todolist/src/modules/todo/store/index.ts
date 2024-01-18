@@ -13,6 +13,9 @@ export const useTodoStore = defineStore("todo", {
     todos: (state) => state.list.data,
   },
   actions: {
+    async resetTodoStore() {
+      this.list.data = [];
+    },
     async getTodos() {
       const { result } = await todoService.getTodos();
       this.list.data = result;

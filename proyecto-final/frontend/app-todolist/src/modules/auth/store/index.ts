@@ -5,6 +5,7 @@ import { ActionForgotPassword, ActionResetPassword, ActionSignIn, ActionSignOut,
 import { router } from "../../../core/routes";
 import { httpAdapterService } from "../../../core/services";
 import { User } from "../../user/interfaces";
+import { useTodoStore } from "../../todo/store";
 
 export const useAuthStore = defineStore("auth", {
   state: () => ({
@@ -56,6 +57,16 @@ export const useAuthStore = defineStore("auth", {
 
       return { success: true };
     },
+    async resetAuthStore() {
+      await httpAdapterService.removeHeaders();
+
+      this.auth.user = { _id: "", fullname: "", access_token: "", expires_at: "", status: "" };
+      this.auth.accessToken = null;
+      this.auth.loggedIn = false;
+
+      const { resetTodoStore } = useTodoStore();
+      await resetTodoStore();
+    },
     async signOut() {
       if (this.auth.user._id) {
         const payload: ActionSignOut = {
@@ -68,11 +79,7 @@ export const useAuthStore = defineStore("auth", {
         }
       }
 
-      this.auth.user = { _id: "", fullname: "", access_token: "", expires_at: "", status: "" };
-      this.auth.accessToken = null;
-      this.auth.loggedIn = false;
-
-      await httpAdapterService.removeHeaders();
+      await this.resetAuthStore();
 
       qalertNotify({
         message: "Ha cerrado su sesión con éxito",
