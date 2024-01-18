@@ -85,6 +85,7 @@ export const useAuthStore = defineStore("auth", {
     async forgotPassword(payload: ActionForgotPassword) {
       const { error, result } = await authService.forgotPassword(payload);
       if (error) {
+        qalertNotify({ color: "red", message: error });
         return { success: false };
       }
 

@@ -9,10 +9,11 @@ export function responseHandler({ req, res }, data) {
 }
 
 export function errorHandler({ req, res, error = Error }) {
-  const statusCode = error.statusCode ? error.statusCode : httpStatusCodes.INTERNAL_SERVER_ERROR;
+  const statusCode = error.status ? error.status : httpStatusCodes.INTERNAL_SERVER_ERROR;
   res.status(statusCode).send({
     success: false,
     error: error.message,
     created_at: new Date(),
+    status: statusCode,
   });
 }

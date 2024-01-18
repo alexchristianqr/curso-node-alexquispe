@@ -88,8 +88,8 @@ class AuthService {
     return true;
   }
   async forgotPassword(payload) {
-    const user = await userService.getByQuery({ username: payload.username });
-    if (!user) throw { message: "user not found", status: httpStatusCodes.FORBIDDEN };
+    const user = await userService.getByQuery({ query: { username: payload.username } });
+    if (!user) throw { message: "No se puede recuperar su contraseña", status: httpStatusCodes.BAD_REQUEST };
 
     const hash = CryptoJS.SHA256(process.env.APP_SECRET);
     const token = hash.toString(CryptoJS.enc.Hex);
@@ -105,7 +105,7 @@ class AuthService {
     if (!checkInputPasswords(payload)) throw { message: "Las contraseñas ingresadas no son iguales", status: httpStatusCodes.BAD_REQUEST };
 
     const user = await userService.getByQuery({ query: { reset_password_token: token, reset_expires_at: { $gt: Date.now() } } });
-    if (!user) throw { message: "No puede cambiar su contraseña", status: httpStatusCodes.FORBIDDEN };
+    if (!user) throw { message: "No se puede cambiar su contraseña", status: httpStatusCodes.BAD_REQUEST };
 
     user.password = hashedPassword(payload.password);
     user.reset_password_token = null;
