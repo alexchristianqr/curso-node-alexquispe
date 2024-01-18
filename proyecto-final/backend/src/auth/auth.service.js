@@ -1,4 +1,4 @@
-import { compareHashedPassword, signJwtToken } from "../core/utils/index.js";
+import { compareHashedPassword, hashedPassword, signJwtToken } from "../core/utils/index.js";
 import { httpStatusCodes } from "../core/enums/index.js";
 import { userService } from "../user/user.service.js";
 import { mailService } from "../core/services/index.js";
@@ -92,11 +92,19 @@ class AuthService {
     const hash = CryptoJS.SHA256(process.env.APP_SECRET);
     user.reset_password_token = hash.toString(CryptoJS.enc.Hex);
     user.reset_expires_at = Date.now() + 36000000;
-    await user.save();
 
+    await user.save();
     return user;
   }
-  async resetPassword() {}
+  async resetPassword(token, payload) {
+    const user = await userService.getByQuery({ reset_password_token: token, reset_expires_at: { $gt: Date.now() } });
+    if (!user) throw { message: "user not found", status: httpStatusCodes.FORBIDDEN };
+
+    user.password = hashedPassword(payload.password);
+
+    await user.save();
+    return user;
+  }
 }
 
 export const authService = new AuthService();

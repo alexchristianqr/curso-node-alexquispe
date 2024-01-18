@@ -49,7 +49,7 @@ const onSignUp = async (payload: any) => {
       <q-btn type="submit" color="primary" label="Crear usuario" :loading="loading" :disable="loading">
         <template v-slot:loading><q-spinner /></template>
       </q-btn>
-      <div>Si estoy registrado, haga clic para <a href="/login">iniciar sesión</a></div>
+      <div>Si tengo una cuenta, ir a <router-link :to="{ name: 'login' }">iniciar sesión</router-link></div>
     </div>
   </q-form>
 </template>

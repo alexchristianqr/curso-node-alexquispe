@@ -40,7 +40,7 @@ const onSignIn = async (payload: any) => {
     <div class="row">
       <div class="col">
         <div class="text-right">
-          <a href="/forgot">Olvidé mi contraseña</a>
+          <router-link :to="{ name: 'forgot' }">Olvidé mi contraseña</router-link>
         </div>
       </div>
     </div>
@@ -48,7 +48,7 @@ const onSignIn = async (payload: any) => {
       <q-btn type="submit" color="primary" label="Iniciar Sesion" :loading="loading" :disable="loading">
         <template v-slot:loading><q-spinner /></template>
       </q-btn>
-      <div>Si no está registrado, haga clic <a href="/register">aquí</a></div>
+      <div>Si no tienes una cuenta, ir a <router-link :to="{ name: 'register' }">registrarme</router-link></div>
     </div>
   </q-form>
 </template>

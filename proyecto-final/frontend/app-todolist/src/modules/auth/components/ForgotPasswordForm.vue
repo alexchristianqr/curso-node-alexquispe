@@ -35,7 +35,7 @@ const onForgot = async (payload: any) => {
       <template v-slot:loading><q-spinner /></template>
     </q-btn>
     <div class="q-gutter-md text-center">
-      <div>Si estoy registrado, haga clic para <a href="/login">iniciar sesión</a></div>
+      <div>¡Ups! ya recordé mi contraseña, ir a <router-link :to="{ name: 'login' }">iniciar sesión</router-link></div>
     </div>
   </q-form>
 </template>

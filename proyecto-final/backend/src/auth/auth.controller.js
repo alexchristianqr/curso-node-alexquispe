@@ -40,8 +40,9 @@ class AuthController {
   }
   async resetPassword(req, res) {
     try {
+      const { token } = req.params;
       const { payload } = req.body;
-      const result = await authService.resetPassword(payload);
+      const result = await authService.resetPassword(token, payload);
       return responseHandler({ req, res }, result);
     } catch (error) {
       return errorHandler({ req, res, error });
