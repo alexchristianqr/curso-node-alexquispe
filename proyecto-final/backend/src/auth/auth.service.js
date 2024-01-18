@@ -3,6 +3,7 @@ import { httpStatusCodes } from "../core/enums/index.js";
 import { userService } from "../user/user.service.js";
 import { mailService } from "../core/services/index.js";
 import { checkInputPasswords } from "./auth.util.js";
+import CryptoJS from "crypto-js";
 
 class AuthService {
   async signUp(payload) {
@@ -47,6 +48,8 @@ class AuthService {
       expires_at: new Date(expires_at),
       refresh_at: new Date(),
       revoked: false,
+      reset_password_token: null,
+      reset_expires_at: null,
     });
 
     // Enviar email
@@ -76,11 +79,23 @@ class AuthService {
       expires_at: null,
       refresh_at: new Date(),
       revoked: true,
+      reset_password_token: null,
+      reset_expires_at: null,
     });
 
     return true;
   }
-  async forgotPassword() {}
+  async forgotPassword(payload) {
+    const user = await userService.getByQuery({ username: payload.username });
+    if (!user) throw { message: "user not found", status: httpStatusCodes.FORBIDDEN };
+
+    const hash = CryptoJS.SHA256(process.env.APP_SECRET);
+    user.reset_password_token = hash.toString(CryptoJS.enc.Hex);
+    user.reset_expires_at = Date.now() + 36000000;
+    await user.save();
+
+    return user;
+  }
   async resetPassword() {}
 }
 

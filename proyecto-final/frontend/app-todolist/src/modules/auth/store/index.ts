@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { authService } from "../services/auth.service.ts";
 import { qalertNotify } from "../../../core/utils";
-import { ActionSignIn, ActionSignOut, ActionSignUp } from "../interfaces";
+import { ActionForgotPassword, ActionSignIn, ActionSignOut, ActionSignUp } from "../interfaces";
 import { router } from "../../../core/routes";
 import { httpAdapterService } from "../../../core/services";
 import { User } from "../../user/interfaces";
@@ -34,7 +34,21 @@ export const useAuthStore = defineStore("auth", {
 
       return { success: true };
     },
-    async signIn(payload: ActionSignIn): Promise<any> {
+    async forgotPassword(payload: ActionForgotPassword) {
+      const { error } = await authService.forgotPassword(payload);
+      if (error) {
+        return { success: false };
+      }
+
+      await router.replace({ name: "login" });
+
+      qalertNotify({
+        message: "Hemos enviado un correo electronico para la recuperación de su contraseña",
+      });
+
+      return { success: true };
+    },
+    async signIn(payload: ActionSignIn) {
       const { result, error } = await authService.signIn(payload);
       if (error) {
         qalertNotify({
@@ -49,6 +63,8 @@ export const useAuthStore = defineStore("auth", {
       this.auth.loggedIn = true;
 
       httpAdapterService.addHeaderAuthorization(result.user.access_token);
+
+      await router.replace({ name: "home" });
 
       qalertNotify({
         message: "Usted ha iniciado sesión con éxito",
@@ -78,7 +94,6 @@ export const useAuthStore = defineStore("auth", {
       await httpAdapterService.removeHeaders();
 
       qalertNotify({
-        color: "red",
         message: "Ha cerrado su sesión con éxito",
       });
 

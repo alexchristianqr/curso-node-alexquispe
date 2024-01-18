@@ -2,10 +2,8 @@
 import { ref } from "vue";
 import { ActionSignIn } from "../interfaces";
 import { useAuthStore } from "../store";
-import { useRouter } from "vue-router";
 
 const { signIn } = useAuthStore();
-const router = useRouter();
 
 const usernameRef = ref();
 const passwordRef = ref();
@@ -27,14 +25,13 @@ const onSignIn = async (payload: any) => {
   if (!success) {
     await loadingSubmit(false);
   }
-  await router.push({ name: "home" });
 };
 </script>
 
 <template>
   <h4>Login</h4>
   <q-form class="q-gutter-md" @submit.prevent.stop="onSubmit(payloadForm)">
-    <q-input :ref="usernameRef" outlined v-model="payloadForm.username" label="Usuario" :rules="[(val) => !!val || 'Campo obligatorio']" />
+    <q-input :ref="usernameRef" outlined v-model="payloadForm.username" label="Email" :rules="[(val) => !!val || 'Campo obligatorio']" />
     <q-input :type="isPwd ? 'password' : 'text'" :ref="passwordRef" outlined v-model="payloadForm.password" label="Contraseña" :rules="[(val) => !!val || 'Campo obligatorio']">
       <template v-slot:append>
         <q-icon :name="isPwd ? 'visibility_off' : 'visibility'" class="cursor-pointer" @click="isPwd = !isPwd" />
@@ -43,7 +40,7 @@ const onSignIn = async (payload: any) => {
     <div class="row">
       <div class="col">
         <div class="text-right">
-          <a href="/forgot">Recuperar contraseña</a>
+          <a href="/forgot">Olvidé mi contraseña</a>
         </div>
       </div>
     </div>

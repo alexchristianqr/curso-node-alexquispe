@@ -11,11 +11,13 @@ axios.interceptors.response.use(
   async (error) => {
     console.error("[axios.interceptors]", { error });
     const { status } = error.response;
-    if (status === 401) {
-      await router.push({ name: "login" });
-      return error.response;
-    } else {
-      return error.response;
+    switch (status) {
+      case 401:
+      case 403:
+        await router.push({ name: "login" });
+        return error.response;
+      default:
+        return error.response;
     }
   },
 );

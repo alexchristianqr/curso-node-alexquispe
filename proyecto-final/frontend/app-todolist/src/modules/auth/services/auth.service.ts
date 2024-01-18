@@ -1,11 +1,20 @@
 import { httpAdapterService } from "../../../core/services";
-import { ActionSignIn, ActionSignOut, ActionSignUp } from "../interfaces";
+import { ActionForgotPassword, ActionSignIn, ActionSignOut, ActionSignUp } from "../interfaces";
 
 class AuthService {
   async signUp(payload: ActionSignUp) {
     try {
       const data = { payload };
       const response = await httpAdapterService.post("/auth/register", data);
+      return response.data;
+    } catch (error) {
+      return error;
+    }
+  }
+  async forgotPassword(payload: ActionForgotPassword) {
+    try {
+      const data = { payload };
+      const response = await httpAdapterService.post("/auth/forgot", data);
       return response.data;
     } catch (error) {
       return error;

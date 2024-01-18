@@ -10,6 +10,10 @@ export interface ActionSignIn {
   password: string | null;
 }
 
+export interface ActionForgotPassword {
+  username: string | null;
+}
+
 export interface ActionSignOut {
   userId: string | null;
 }

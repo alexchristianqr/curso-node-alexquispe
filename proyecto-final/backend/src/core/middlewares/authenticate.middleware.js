@@ -1,4 +1,4 @@
-import { errorHandler } from "../utils/index.js";
+import { errorHandler, verifyToken } from "../utils/index.js";
 import { httpStatusCodes } from "../enums/index.js";
 import { userService } from "../../user/user.service.js";
 
@@ -9,9 +9,13 @@ export async function validateBearerToken(req, res, next) {
 
     // Set header
     const headerAuth = req.header("Authorization");
-    if (!headerAuth) return res.status(httpStatusCodes.UNAUTHORIZED).json({ message: "header authorization not exists" });
+    if (!headerAuth) return res.status(httpStatusCodes.FORBIDDEN).json({ message: "header authorization not exists" });
     const accessToken = headerAuth.replace("Bearer ", "");
-    if (!accessToken) return res.status(httpStatusCodes.UNAUTHORIZED).json({ message: "access unauthorized" });
+    if (!accessToken) return res.status(httpStatusCodes.FORBIDDEN).json({ message: "access unauthorized" });
+
+    await verifyToken(accessToken, (err) => {
+      if (err) return res.status(httpStatusCodes.FORBIDDEN).json({ message: "access unauthorized" });
+    });
 
     // Set query
     const queryUserOauth = {
