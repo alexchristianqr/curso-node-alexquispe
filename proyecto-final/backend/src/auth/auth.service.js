@@ -50,6 +50,7 @@ class AuthService {
       revoked: false,
       reset_password_token: null,
       reset_expires_at: null,
+      updated_at: new Date(),
     });
 
     // Enviar email
@@ -81,6 +82,7 @@ class AuthService {
       revoked: true,
       reset_password_token: null,
       reset_expires_at: null,
+      updated_at: new Date(),
     });
 
     return true;
@@ -90,20 +92,29 @@ class AuthService {
     if (!user) throw { message: "user not found", status: httpStatusCodes.FORBIDDEN };
 
     const hash = CryptoJS.SHA256(process.env.APP_SECRET);
-    user.reset_password_token = hash.toString(CryptoJS.enc.Hex);
+    const token = hash.toString(CryptoJS.enc.Hex);
+
+    user.reset_password_token = token;
     user.reset_expires_at = Date.now() + 36000000;
+    user.updated_at = new Date();
 
     await user.save();
-    return user;
+    return { token };
   }
   async resetPassword(token, payload) {
-    const user = await userService.getByQuery({ reset_password_token: token, reset_expires_at: { $gt: Date.now() } });
-    if (!user) throw { message: "user not found", status: httpStatusCodes.FORBIDDEN };
+    if (!checkInputPasswords(payload)) throw { message: "Las contraseñas ingresadas no son iguales", status: httpStatusCodes.BAD_REQUEST };
+
+    const user = await userService.getByQuery({ query: { reset_password_token: token, reset_expires_at: { $gt: Date.now() } } });
+    if (!user) throw { message: "No puede cambiar su contraseña", status: httpStatusCodes.FORBIDDEN };
 
     user.password = hashedPassword(payload.password);
+    user.reset_password_token = null;
+    user.reset_expires_at = null;
+    user.updated_at = new Date();
 
     await user.save();
-    return user;
+
+    return true;
   }
 }
 

@@ -13,6 +13,12 @@ export interface ActionSignIn {
 export interface ActionForgotPassword {
   username: string | null;
 }
+export interface ActionResetPassword {
+  token: string | null;
+  // username: string | null;
+  password: string | null;
+  repeat_password: string | null;
+}
 
 export interface ActionSignOut {
   userId: string | null;

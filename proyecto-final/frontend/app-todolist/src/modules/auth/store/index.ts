@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { authService } from "../services/auth.service.ts";
 import { qalertNotify } from "../../../core/utils";
-import { ActionForgotPassword, ActionSignIn, ActionSignOut, ActionSignUp } from "../interfaces";
+import { ActionForgotPassword, ActionResetPassword, ActionSignIn, ActionSignOut, ActionSignUp } from "../interfaces";
 import { router } from "../../../core/routes";
 import { httpAdapterService } from "../../../core/services";
 import { User } from "../../user/interfaces";
@@ -30,20 +30,6 @@ export const useAuthStore = defineStore("auth", {
 
       qalertNotify({
         message: "Usted se ha registrado con éxito. Inicie sesión con sus credenciales",
-      });
-
-      return { success: true };
-    },
-    async forgotPassword(payload: ActionForgotPassword) {
-      const { error } = await authService.forgotPassword(payload);
-      if (error) {
-        return { success: false };
-      }
-
-      await router.replace({ name: "login" });
-
-      qalertNotify({
-        message: "Hemos enviado un correo electronico para la recuperación de su contraseña",
       });
 
       return { success: true };
@@ -79,10 +65,7 @@ export const useAuthStore = defineStore("auth", {
         };
         const { error } = await authService.signOut(payload);
         if (error) {
-          qalertNotify({
-            color: "red",
-            message: error,
-          });
+          qalertNotify({ color: "red", message: error });
           return { success: false };
         }
       }
@@ -98,6 +81,35 @@ export const useAuthStore = defineStore("auth", {
       });
 
       await router.replace({ name: "login" });
+
+      return { success: true };
+    },
+    async forgotPassword(payload: ActionForgotPassword) {
+      const { error, result } = await authService.forgotPassword(payload);
+      if (error) {
+        return { success: false };
+      }
+
+      await router.replace({ name: "reset", params: { token: result.token } });
+
+      qalertNotify({
+        message: "Hemos enviado un correo electronico para la recuperación de su contraseña",
+      });
+
+      return { success: true };
+    },
+    async resetPassword(payload: ActionResetPassword) {
+      const { error } = await authService.resetPassword(payload);
+      if (error) {
+        qalertNotify({ color: "red", message: error });
+        return { success: false };
+      }
+
+      await router.replace({ name: "login" });
+
+      qalertNotify({
+        message: "Su contraseña se ha actualizado con éxito",
+      });
 
       return { success: true };
     },

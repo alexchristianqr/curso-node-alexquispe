@@ -7,6 +7,6 @@ router.post("/auth/register", authController.signUp);
 router.post("/auth/login", authController.signIn);
 router.post("/auth/logout", validateBearerToken, authController.signOut);
 router.post("/auth/forgot", authController.forgotPassword);
-router.post("/auth/reset", authController.resetPassword);
+router.post("/auth/reset/:token", authController.resetPassword);
 
 export { router as authRoute };

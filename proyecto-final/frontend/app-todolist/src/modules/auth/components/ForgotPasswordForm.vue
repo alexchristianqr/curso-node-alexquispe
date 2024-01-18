@@ -6,9 +6,7 @@ import { ActionForgotPassword } from "../interfaces";
 const { forgotPassword } = useAuthStore();
 
 const usernameRef = ref();
-const passwordRef = ref();
 const loading = ref(false);
-const isPwd = ref(true);
 
 const payloadForm = ref<ActionForgotPassword>({ username: null });
 const loadingSubmit = async (stateLoading: boolean) => {

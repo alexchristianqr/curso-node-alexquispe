@@ -1,30 +1,35 @@
 <script setup lang="ts">
-import { useAuthStore } from "../../auth/store";
-import { ref } from "vue";
-import { ActionSignUp } from "../../auth/interfaces";
+import { useAuthStore } from "../store";
+import { ref, onMounted } from "vue";
+import { ActionResetPassword } from "../interfaces";
+import { useRoute, useRouter } from "vue-router";
 
-const { signUp } = useAuthStore();
+const { resetPassword } = useAuthStore();
+const { params } = useRoute();
 
-const fullnameRef = ref();
-const usernameRef = ref();
 const passwordRef = ref();
 const repeatPasswordRef = ref();
 const loading = ref(false);
 const isPwd = ref(true);
 const isRepeatPwd = ref(true);
 
-const payloadForm = ref<ActionSignUp>({ fullname: null, username: null, password: null, repeat_password: null });
+const payloadForm = ref<ActionResetPassword>({ token: null, password: null, repeat_password: null });
+
+onMounted(() => {
+  console.log({ params });
+  payloadForm.value.token = params.token.toString();
+});
 
 const loadingSubmit = async (stateLoading: boolean) => {
   return (loading.value = stateLoading);
 };
 const onSubmit = async (payload: any) => {
   await loadingSubmit(true);
-  await onSignUp(payload);
+  await onReset(payload);
   await loadingSubmit(false);
 };
-const onSignUp = async (payload: any) => {
-  const { success = null } = await signUp(payload);
+const onReset = async (payload: any) => {
+  const { success = false } = await resetPassword(payload);
   if (!success) {
     await loadingSubmit(false);
   }
@@ -32,10 +37,8 @@ const onSignUp = async (payload: any) => {
 </script>
 
 <template>
-  <h4>Registro</h4>
+  <h4>Cambiar contraseña</h4>
   <q-form class="q-gutter-md" @submit.prevent.stop="onSubmit(payloadForm)">
-    <q-input :ref="fullnameRef" outlined v-model="payloadForm.fullname" label="Nombre completo" :rules="[(val) => !!val || 'Campo obligatorio']" />
-    <q-input :ref="usernameRef" outlined v-model="payloadForm.username" label="Usuario" :rules="[(val) => !!val || 'Campo obligatorio']" />
     <q-input :type="isPwd ? 'password' : 'text'" :ref="passwordRef" outlined v-model="payloadForm.password" label="Contraseña" :rules="[(val) => !!val || 'Campo obligatorio']">
       <template v-slot:append>
         <q-icon :name="isPwd ? 'visibility_off' : 'visibility'" class="cursor-pointer" @click="isPwd = !isPwd" />
@@ -53,11 +56,11 @@ const onSignUp = async (payload: any) => {
         <q-icon :name="isRepeatPwd ? 'visibility_off' : 'visibility'" class="cursor-pointer" @click="isRepeatPwd = !isRepeatPwd" />
       </template>
     </q-input>
+    <q-btn type="submit" color="primary" label="Actualizar" :loading="loading" :disable="loading">
+      <template v-slot:loading><q-spinner /></template>
+    </q-btn>
     <div class="q-gutter-md text-center">
-      <q-btn type="submit" color="primary" label="Crear usuario" :loading="loading" :disable="loading">
-        <template v-slot:loading><q-spinner /></template>
-      </q-btn>
-      <div>Si tengo una cuenta, ir a <router-link :to="{ name: 'login' }">iniciar sesión</router-link></div>
+      <div>¡Ups! ya recordé mi contraseña, ir a <router-link :to="{ name: 'login' }">iniciar sesión</router-link></div>
     </div>
   </q-form>
 </template>

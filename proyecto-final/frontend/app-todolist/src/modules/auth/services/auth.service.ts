@@ -1,20 +1,11 @@
 import { httpAdapterService } from "../../../core/services";
-import { ActionForgotPassword, ActionSignIn, ActionSignOut, ActionSignUp } from "../interfaces";
+import { ActionForgotPassword, ActionResetPassword, ActionSignIn, ActionSignOut, ActionSignUp } from "../interfaces";
 
 class AuthService {
   async signUp(payload: ActionSignUp) {
     try {
       const data = { payload };
       const response = await httpAdapterService.post("/auth/register", data);
-      return response.data;
-    } catch (error) {
-      return error;
-    }
-  }
-  async forgotPassword(payload: ActionForgotPassword) {
-    try {
-      const data = { payload };
-      const response = await httpAdapterService.post("/auth/forgot", data);
       return response.data;
     } catch (error) {
       return error;
@@ -33,6 +24,25 @@ class AuthService {
     try {
       const data = { payload };
       const response = await httpAdapterService.post("/auth/logout", data);
+      return response.data;
+    } catch (error) {
+      return error;
+    }
+  }
+  async forgotPassword(payload: ActionForgotPassword) {
+    try {
+      const data = { payload };
+      const response = await httpAdapterService.post("/auth/forgot", data);
+      return response.data;
+    } catch (error) {
+      return error;
+    }
+  }
+  async resetPassword(payload: ActionResetPassword) {
+    try {
+      const data = { payload };
+      const token = payload.token;
+      const response = await httpAdapterService.post(`/auth/reset/${token}`, data);
       return response.data;
     } catch (error) {
       return error;

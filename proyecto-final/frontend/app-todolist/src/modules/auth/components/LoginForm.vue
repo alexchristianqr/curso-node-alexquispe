@@ -48,7 +48,7 @@ const onSignIn = async (payload: any) => {
       <q-btn type="submit" color="primary" label="Iniciar Sesion" :loading="loading" :disable="loading">
         <template v-slot:loading><q-spinner /></template>
       </q-btn>
-      <div>Si no tienes una cuenta, ir a <router-link :to="{ name: 'register' }">registrarme</router-link></div>
+      <div>Si no tengo cuenta, ir a <router-link :to="{ name: 'register' }">registrarme</router-link></div>
     </div>
   </q-form>
 </template>
