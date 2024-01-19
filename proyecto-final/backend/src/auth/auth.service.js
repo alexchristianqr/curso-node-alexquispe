@@ -94,6 +94,13 @@ class AuthService {
     const hash = CryptoJS.SHA256(process.env.APP_SECRET);
     const token = hash.toString(CryptoJS.enc.Hex);
 
+    // Enviar email
+    await mailService.sendMailSingle({
+      subject: "Recuperación de contraseña",
+      to: payload.username,
+      message: `Ingresa al siguiente enlace para recuperar tu contraseña http://localhost:5173/reset/${token}`,
+    });
+
     user.reset_password_token = token;
     user.reset_expires_at = Date.now() + 36000000;
     user.updated_at = new Date();
