@@ -48,7 +48,7 @@ const removeForm = (data: Todo) => {
   <TodoForm :config-form="configForm" :payload-form="payloadForm" />
 
   <h4>Listado</h4>
-  <div>
+  <div class="q-pb-xl">
     <q-table :columns="columns" :rows="rows" bordered flat row-key="name">
       <template v-slot:body-cell-status="props">
         <q-td :props="props">
