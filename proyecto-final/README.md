@@ -29,6 +29,8 @@ npm run dev
 ```
 
 ## Nota
+- El nombre de la base de datos es: **dbtodo**
+- Las colecciones utilizadas son : **dbtodo.users** y **dbtodo.todolists**
 - La duración del JWT es de 8 horas
 - Completar las configuraciones faltantes en el .env copiado
 - Verificar que el frontend esté ejecutandose en el puerto 5173 -> http://localhost:5173/
