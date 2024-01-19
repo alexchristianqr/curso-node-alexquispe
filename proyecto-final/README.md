@@ -2,25 +2,28 @@
 Proyecto final para la certificación de JS avanzado
 
 ## Requerimientos principales
-- Node >= v18.18.2
-- Npm >= v9.8.1
-- MongoDB >= v5.0
+- Node >= v18.18.2 https://nodejs.org/en/download/
+- Npm >= v9.8.1 https://nodejs.org/en/download/
+- MongoDB >= v7.0 https://www.mongodb.com/try/download/community
+- Git Bash https://git-scm.com/download/win
 
 ## API Postman publicada
 https://documenter.getpostman.com/view/3683906/2s9YsNdAJc
 
 ## Pasos para correr el backend en local
 ```shell
-# Ubicarse en la carpeta raiz y ejecutar
+# En la terminal de gitbash, ubicarse en la carpeta raiz y ejecutar
 cd proyecto-final/backend
+cp .env.example .env # Hacer una copia de las variables de entorno
 npm install
 npm run start
 ```
 
 ## Pasos para correr el frontend en local
 ```shell
-# Ubicarse en la carpeta raiz y ejecutar
+# En la terminal de gitbash, ubicarse en la carpeta raiz y ejecutar
 cd proyecto-final/frontend/app-todolist
+cp .env.example .env # Hacer una copia de las variables de entorno
 npm install
 npm run dev
 ```
