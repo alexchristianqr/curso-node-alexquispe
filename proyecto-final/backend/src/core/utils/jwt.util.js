@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 
-export async function signJwtToken({ user = {}, timeExpiresAt = 0.05, oauthAccessToken = null }) {
+export async function signJwtToken({ user = {}, timeExpiresAt = 8, oauthAccessToken = null }) {
   // Jwt
   let access_token, expires_at;
   const secret = process.env.JWT_SECRET;
