@@ -27,3 +27,9 @@ cp .env.example .env # Hacer una copia de las variables de entorno
 npm install
 npm run dev
 ```
+
+## Nota
+- La duración del JWT es de 8 horas
+- Completar las configuraciones faltantes en el .env copiado
+- Verificar que el frontend esté ejecutandose en el puerto 5173 -> http://localhost:5173/
+- Verificar que el backend esté ejecutandose en el puerto 3000 ->  http://localhost:3000/
